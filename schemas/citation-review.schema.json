@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claimwright.local/schemas/citation-review.schema.json",
+  "title": "ClaimWright Citation Review Record",
+  "type": "object",
+  "required": ["id", "metadata", "status", "tier", "source_access_depth"],
+  "properties": {
+    "id": { "type": "string" },
+    "metadata": { "type": "object" },
+    "status": {
+      "type": "string",
+      "enum": ["accepted", "rejected", "unresolved"]
+    },
+    "tier": {
+      "type": "string",
+      "enum": ["A", "B", "C", "D", "Reject"]
+    },
+    "why": { "type": "string" },
+    "source_access_depth": { "type": "string" },
+    "related_claim_ids": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}
+

@@ -1,0 +1,23 @@
+version: 0.1
+checks:
+  - id: files_changed
+    question: What files, records, artifacts, or external systems changed?
+  - id: claims_introduced
+    question: What claims were introduced, modified, weakened, strengthened, or removed?
+  - id: citations_recorded
+    question: What citations were accepted, rejected, or left unresolved, and why?
+  - id: assumptions_made
+    question: What assumptions remain visible and reviewable?
+  - id: unresolved_risks
+    question: What risks, contradictions, stale claims, or private/public issues remain?
+  - id: tasks_opened
+    question: Were follow-up tasks opened for global knowledge-base impact?
+  - id: capacity_used
+    question: What assistant capacity, time, API budget, or local compute was consumed?
+  - id: branch_outcome
+    question: If branches were considered, which branch was chosen and what consequences follow?
+  - id: broader_review_trigger
+    question: Is a broader knowledge-base impact review needed after the current task?
+  - id: scientific_virtues
+    question: Did the completed action preserve honesty, humility, rigor, skepticism, transparency, and openness to correction?
+

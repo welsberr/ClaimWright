@@ -1,0 +1,33 @@
+version: 0.1
+default_model: mixed
+modes:
+  advisory:
+    behavior: Report risks without blocking.
+  soft_gate:
+    behavior: Warn and require explicit override for configured actions.
+  hard_gate:
+    behavior: Block until required conditions are satisfied or human authority records an exceptional risk acceptance where allowed.
+defaults:
+  private_exploratory_work: advisory
+  costly_or_capacity_threatening_work: soft_gate
+  durable_memory_changes: soft_gate
+  public_release: hard_gate
+hard_gates:
+  - id: unresolved_high_risk_public_claim
+    description: Public release contains unresolved high-risk claims.
+  - id: fabricated_or_unverified_citation
+    description: Citation is fabricated, unverifiable, or metadata-conflicted.
+  - id: private_material_publication
+    description: Public artifact includes private material, secrets, local paths, or unpublished sensitive notes.
+  - id: destructive_irreversible_action
+    description: Action is destructive and cannot be rolled back to a known-good state.
+  - id: contradicted_or_stale_claim
+    description: Public artifact relies on a claim marked contradicted or stale pending review.
+protected_resources:
+  - assistant_context_capacity
+  - paid_model_budget
+  - local_compute_capacity
+  - gpu_availability
+  - wall_clock_time
+  - parallel_work_capacity
+

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claimwright.local/schemas/claim-record.schema.json",
+  "title": "ClaimWright Claim Record",
+  "type": "object",
+  "required": ["id", "text", "state", "provenance", "confidence"],
+  "properties": {
+    "id": { "type": "string" },
+    "text": { "type": "string" },
+    "state": { "type": "string" },
+    "scope": { "type": "string" },
+    "provenance": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "confidence": {
+      "type": "object",
+      "properties": {
+        "source_reliability": { "type": "string" },
+        "source_access_depth": { "type": "string" },
+        "claim_source_fit": { "type": "string" },
+        "methodological_strength": { "type": "string" },
+        "consensus_status": { "type": "string" },
+        "adversarial_robustness": { "type": "string" },
+        "currentness": { "type": "string" },
+        "human_review_confidence": { "type": "string" }
+      }
+    },
+    "public_allowed": { "type": "boolean" },
+    "notes": { "type": "string" }
+  }
+}
+

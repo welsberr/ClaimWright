@@ -1,0 +1,52 @@
+version: 0.1
+claim_states:
+  - id: exploratory_hypothesis
+    public_allowed: false
+    description: A speculative idea useful for private reasoning.
+  - id: plausible_under_supported
+    public_allowed: false
+    description: Plausible but not yet sufficiently evidenced.
+  - id: locally_useful_working_premise
+    public_allowed: false
+    description: Useful for ongoing work but not established enough for public claims.
+  - id: supported_by_primary_evidence
+    public_allowed: conditional
+    description: Supported by inspected primary evidence.
+  - id: supported_but_contested
+    public_allowed: conditional
+    description: Supported, but material counterarguments must be represented.
+  - id: contradicted_under_current_scope
+    public_allowed: false
+    description: Contradicted by strong evidence or formal result under current scope.
+  - id: historically_valid_delimited
+    public_allowed: conditional
+    description: Valid in a historical or formal scope but later delimited or superseded.
+  - id: stale_pending_review
+    public_allowed: false
+    description: Affected by new knowledge and awaiting review.
+  - id: public_safe
+    public_allowed: true
+    description: Reviewed and approved for public-facing use.
+  - id: private_only_speculation
+    public_allowed: false
+    description: Retained for private reasoning only.
+confidence_dimensions:
+  - source_reliability
+  - source_access_depth
+  - claim_source_fit
+  - methodological_strength
+  - consensus_status
+  - adversarial_robustness
+  - currentness
+  - human_review_confidence
+source_access_depths:
+  - metadata_only
+  - abstract_only
+  - snippets_only
+  - full_text_unreviewed
+  - full_text_reviewed
+  - primary_data_or_code_reviewed
+bayesian_guidance:
+  metadata_only_interpretive_claim_prior: low
+  metadata_only_numeric_claim_prior: case_specific
+

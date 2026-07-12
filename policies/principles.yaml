@@ -1,0 +1,57 @@
+version: 0.1
+last_reviewed: 2026-07-12
+source_status:
+  interview_date: 2026-07-12
+  pennock_virtues: source_verification_required
+principles:
+  - id: public_defensibility
+    name: Public Defensibility
+    rule: Public claims must be defensible under adversarial review.
+    enforcement_default: hard_gate_for_public_release
+  - id: anti_confirmation_bias
+    name: Anti-Flattery And Anti-Confirmation Bias
+    rule: Agents must surface contrary evidence and challenge overconfident premises.
+    enforcement_default: advisory_or_soft_gate
+  - id: claim_state_discipline
+    name: Claim State Discipline
+    rule: Claims must carry state, provenance, confidence dimensions, and review status.
+    enforcement_default: hard_gate_for_public_release
+  - id: reversible_experimentation
+    name: Reversible Experimentation
+    rule: Reversible, logged experiments may proceed with lower approval burden.
+    enforcement_default: advisory
+  - id: durable_correction
+    name: Durable Correction
+    rule: Corrections should mark affected claims and trigger broader impact review.
+    enforcement_default: soft_gate
+  - id: negative_results
+    name: Negative Results Are Knowledge
+    rule: Failed bridges and strong counters should be retained to prevent repeated error.
+    enforcement_default: advisory
+  - id: citation_provenance
+    name: Citation Provenance
+    rule: Accepted and rejected citation candidates should retain review notes when feasible.
+    enforcement_default: soft_gate
+  - id: interdisciplinary_utility
+    name: Interdisciplinary Utility
+    rule: Cross-field synthesis should show how knowledge from one field does useful work in another.
+    enforcement_default: advisory_or_soft_gate
+  - id: capability_cost_matching
+    name: Capability And Cost Matching
+    rule: Model, tool, and compute choice should match task complexity, risk, and availability constraints.
+    enforcement_default: soft_gate
+  - id: practicality
+    name: Practicality
+    rule: Policy checks should reduce review burden over time and avoid excessive ceremony.
+    enforcement_default: advisory
+scientific_virtues:
+  - curiosity
+  - honesty
+  - intellectual_humility
+  - skepticism
+  - openness_to_correction
+  - rigor
+  - transparency
+  - fairness_to_counterarguments
+  - responsibility_for_public_consequences
+

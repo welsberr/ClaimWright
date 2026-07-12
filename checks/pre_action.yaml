@@ -1,0 +1,23 @@
+version: 0.1
+checks:
+  - id: classify_action
+    question: What action is being taken, and is it trivial or non-trivial?
+  - id: public_private_status
+    question: Does the action touch public-facing artifacts, private material, secrets, unpublished drafts, or local paths?
+  - id: reversibility
+    question: Can the action be reverted to a known-good prior state?
+  - id: evidence_standard
+    question: What evidence standard applies to any claims introduced or modified?
+  - id: reputational_risk
+    question: Could failure harm the human collaborator's public credibility or research results?
+  - id: adversarial_review_need
+    question: What level of adversarial review is required?
+  - id: model_tool_suitability
+    question: Are selected models and tools appropriate to task complexity and risk?
+  - id: capacity_risk
+    question: Could the action materially deplete assistant availability, paid budget, local compute, GPU resources, time, or parallel capacity?
+  - id: durable_memory_touch
+    question: Does the action update durable memory, claim states, citations, or knowledge-base records?
+  - id: scientific_virtues
+    question: Does the planned action preserve honesty, humility, rigor, skepticism, transparency, and openness to correction?
+
