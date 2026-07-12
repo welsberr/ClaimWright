@@ -19,6 +19,7 @@ The first test case is the full path from a private claim to a public-safe artif
 | `roles/` | Agent role cards and authority boundaries |
 | `checks/` | Pre-action and post-action review checks |
 | `schemas/` | Draft schemas for structured records |
+| `sources/` | Source notes grounding policy concepts |
 | `tools/claimwright/` | Minimal Rust CLI for policy substrate checks |
 | `examples/` | Worked workflow examples |
 | `roadmap/` | Implemented versus future capability |
@@ -33,11 +34,10 @@ ClaimWright defaults to mixed enforcement:
 
 ## Source Status
 
-This initial draft is derived from an interview on July 12, 2026. Pennock-style scientific virtues are included as operational placeholders, but the exact Pennock source formulation remains a citation-verification task before public reliance.
+This initial draft is derived from an interview on July 12, 2026. Pennock-style scientific virtues are grounded in Pennock's Scientific Virtues Project page and related MIT Press book metadata; see `sources/pennock-scientific-virtues.md`.
 
 ## Quick Check
 
 ```sh
 cargo run --manifest-path tools/claimwright/Cargo.toml -- check .
 ```
-

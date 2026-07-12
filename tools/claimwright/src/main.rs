@@ -18,6 +18,7 @@ const REQUIRED_FILES: &[&str] = &[
     "roles/publication-gatekeeper.md",
     "schemas/claim-record.schema.json",
     "schemas/citation-review.schema.json",
+    "sources/pennock-scientific-virtues.md",
     "roadmap/ROADMAP.md",
 ];
 

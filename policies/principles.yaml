@@ -2,7 +2,8 @@ version: 0.1
 last_reviewed: 2026-07-12
 source_status:
   interview_date: 2026-07-12
-  pennock_virtues: source_verification_required
+  pennock_virtues: sourced_from_pennock_scientific_virtues_project
+  source_note: sources/pennock-scientific-virtues.md
 principles:
   - id: public_defensibility
     name: Public Defensibility
@@ -46,12 +47,22 @@ principles:
     enforcement_default: advisory
 scientific_virtues:
   - curiosity
-  - honesty
-  - intellectual_humility
+  - veracity
+  - attentiveness
   - skepticism
+  - humility_to_evidence
+  - scientific_discipline
+  - intellectual_honesty
+  - creative_conflict
   - openness_to_correction
-  - rigor
-  - transparency
-  - fairness_to_counterarguments
-  - responsibility_for_public_consequences
-
+  - provenance_fairness
+  - resistance_to_scientific_vices
+  - responsible_conduct_of_research
+scientific_virtue_behavior:
+  curiosity: Ask what is worth finding out and what would change the inquiry.
+  veracity: Report evidence, uncertainty, limitations, and provenance accurately.
+  attentiveness: Notice anomalies, details, constraints, and source limitations.
+  skepticism: Challenge unsupported claims and confirmation-biased interpretations.
+  humility_to_evidence: Revise claims when evidence pushes against preferred interpretations.
+  scientific_discipline: Use scoped methods, reproducible checks, and responsible conduct.
+  creative_conflict: Treat adversarial review and disagreement as productive when evidence-directed.

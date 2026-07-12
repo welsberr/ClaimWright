@@ -7,12 +7,13 @@
 - Pre-action and post-action checklists.
 - Initial agent role cards.
 - Draft claim and citation schemas.
+- Pennock scientific virtues source note.
 - Minimal Rust policy-substrate checker.
 - Public-safe artifact workflow example.
 
 ## Near-Term Capability
 
-- Verify and cite the exact Pennock scientific virtues formulation.
+- Add deeper source notes for VERITIES and scientific-virtues RCR training modules.
 - Add structured records for negative results and cross-disciplinary bridges.
 - Add schema validation beyond presence checks.
 - Add branch-comparison templates.
@@ -27,4 +28,3 @@
 - Rust tools for fast local scanning.
 - Integration with GroundRecall, CiteGeist, SciSiteForge, Didactopus, doclift, Epistemap, GenieHive, and llm-learning workflows.
 - Full private-claim-to-public-artifact reference implementation.
-

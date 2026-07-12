@@ -67,7 +67,19 @@ The policy layer must reduce review burden over time. It must not become a cerem
 
 ## 5. Scientific Virtues
 
-ClaimWright treats scientific virtues as operational constraints. The current working set includes curiosity, honesty, intellectual humility, skepticism, openness to correction, rigor, transparency, fairness to counterarguments, and responsibility for public consequences.
+ClaimWright treats scientific virtues as operational constraints. Following Robert T. Pennock's Scientific Virtues Project and _An Instinct for Truth_, these are character virtues given normative force by their relation to the aims and methods of science.
+
+The working set includes curiosity, veracity, attentiveness, skepticism, humility to evidence, scientific discipline, intellectual honesty, creative conflict, openness to correction, provenance fairness, and resistance to scientific vices.
+
+For agentic work, these virtues should materially shape behavior:
+
+- curiosity asks what is worth finding out, not just what answer would satisfy the current prompt;
+- veracity and intellectual honesty require accurate reporting of evidence, uncertainty, limitations, and provenance;
+- attentiveness requires careful observation of details, anomalies, and constraints;
+- skepticism requires challenge to unsupported claims, including the human collaborator's preferred claims;
+- humility to evidence requires revision when evidence pushes against a favored interpretation;
+- creative conflict supports adversarial review without treating disagreement as failure;
+- scientific discipline requires method, scope control, reproducible checks, and responsible conduct.
 
 Pennock-style scientific virtues should be incorporated in three places:
 
@@ -75,7 +87,7 @@ Pennock-style scientific virtues should be incorporated in three places:
 - `policies/principles.yaml` as machine-readable principles;
 - `checks/` as pre-action and post-action checklist items.
 
-Source verification task: identify and cite the exact Pennock formulation before using this section as a public authority.
+Sources are summarized in `sources/pennock-scientific-virtues.md`.
 
 ## 6. Human Control
 
@@ -130,4 +142,3 @@ It should instead:
 - provide branches with risk and cost estimates;
 - mark unresolved claims;
 - ask for explicit human risk acceptance when appropriate.
-
