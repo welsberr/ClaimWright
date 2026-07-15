@@ -5,6 +5,7 @@ use std::process;
 
 const REQUIRED_FILES: &[&str] = &[
     "MOU.md",
+    "LICENSE",
     "policies/principles.yaml",
     "policies/claim_states.yaml",
     "policies/enforcement.yaml",

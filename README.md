@@ -136,6 +136,12 @@ See:
 - `checks/pre_action.yaml`
 - `checks/post_action.yaml`
 
+## License
+
+ClaimWright is licensed under the Apache License, Version 2.0. See `LICENSE`.
+
+Copyright 2026 ClaimWright contributors.
+
 ## Current Status
 
 ClaimWright is an initial framework, not a complete enforcement engine.
