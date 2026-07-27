@@ -1,5 +1,31 @@
 # ClaimWright Roadmap
 
+## Top Priority: Policy Plugin Compatibility
+
+ClaimWright should be usable as one policy framework among many for governed
+memory layers such as GroundRecall. The integration target is not bespoke
+GroundRecall code that embeds ClaimWright semantics everywhere. The target is a
+bounded policy-plugin contract that lets ClaimWright answer standard decision
+questions about read, propose, promote, publish, federate, adjudicate, redact,
+delete, cite, and act operations.
+
+Near-term ClaimWright work should therefore make its policy content easier to
+consume through adapters:
+
+- assign stable IDs and versions to principles, claim states, enforcement
+  defaults, checklists, role cards, and publication gates;
+- expose machine-readable findings with decision values compatible with
+  `allow`, `require_review`, `soft_gate`, `hard_gate`, and `deny`;
+- distinguish policy findings from permission grants;
+- express obligations, required reviewers, redactions, confidence effects,
+  release caps, and audit tags explicitly;
+- document how ClaimWright findings compose with organization, project,
+  federation, legal/privacy, and publication policies.
+
+GroundRecall now has an initial generic policy-plugin boundary and a
+ClaimWright directory adapter. ClaimWright should treat that as the first
+compatibility target while staying independent enough to serve other systems.
+
 ## Implemented In This Draft
 
 - Human-readable MOU.
