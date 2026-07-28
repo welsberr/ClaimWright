@@ -5,9 +5,13 @@
 ClaimWright should be usable as one policy framework among many for governed
 memory layers such as GroundRecall. The integration target is not bespoke
 GroundRecall code that embeds ClaimWright semantics everywhere. The target is a
-bounded policy-plugin contract that lets ClaimWright answer standard decision
-questions about read, propose, promote, publish, federate, adjudicate, redact,
-delete, cite, and act operations.
+bounded GroundRecall-owned policy-plugin contract that lets ClaimWright answer
+standard decision questions about read, propose, promote, publish, federate,
+adjudicate, redact, delete, cite, and act operations.
+
+GroundRecall is the source of truth for that interface. ClaimWright should
+conform to GroundRecall's `docs/policy-plugin-spec.md` rather than defining a
+parallel plugin format.
 
 Near-term ClaimWright work should therefore make its policy content easier to
 consume through adapters:
@@ -22,9 +26,19 @@ consume through adapters:
 - document how ClaimWright findings compose with organization, project,
   federation, legal/privacy, and publication policies.
 
-GroundRecall now has an initial generic policy-plugin boundary and a
+GroundRecall now has an authoritative policy-plugin specification, schema
+version validation, an initial generic policy-plugin boundary, and a
 ClaimWright directory adapter. ClaimWright should treat that as the first
 compatibility target while staying independent enough to serve other systems.
+
+ClaimWright may be packaged as one plugin or as a collection of additive
+plugins, for example:
+
+- claim-state policy;
+- citation-review policy;
+- publication-gate policy;
+- adversarial-review policy;
+- private/public-boundary policy.
 
 ## Implemented In This Draft
 
