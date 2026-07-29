@@ -34,3 +34,9 @@ rules:
     actions: [prior_work_review, initiate_durable_work]
     default_decision: require_review
     obligations: [record_prior_work_query, preserve_negative_results, review_similarity_candidates]
+  - id: catalog_least_disclosure
+    decision_points: [federate_export, federate_import, read]
+    actions: [publish_federation_catalog, import_federation_catalog, read_federation_catalog_entry]
+    default_decision: require_review
+    obligations: [apply_receiver_release_cap, prevent_protected_topic_inference, preserve_catalog_signature]
+    required_reviewers: [scope-steward]

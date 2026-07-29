@@ -57,6 +57,8 @@ cross-repository work-package authority is GroundRecall's
   discipline.
 - IF-04 prior-work review policy rule requiring a bounded review query and
   preservation of negative or inconclusive results.
+- IF-05 least-disclosure federation-catalog rule with receiver-side release
+  caps and protected-topic inference safeguards.
 - Human-readable MOU.
 - Machine-readable principles, claim states, and enforcement defaults.
 - Pre-action and post-action checklists.

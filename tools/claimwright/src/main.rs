@@ -115,6 +115,7 @@ fn main() {
             "stewardship_required",
             "rationale_preservation",
             "prior_work_review",
+            "catalog_least_disclosure",
         ] {
             if !text.contains(marker) {
                 failures.push(format!(
