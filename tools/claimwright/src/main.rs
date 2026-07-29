@@ -116,6 +116,7 @@ fn main() {
             "rationale_preservation",
             "prior_work_review",
             "catalog_least_disclosure",
+            "subscription_purpose_and_routing",
         ] {
             if !text.contains(marker) {
                 failures.push(format!(

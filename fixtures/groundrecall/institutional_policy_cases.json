@@ -10,7 +10,7 @@
     {"case_id": "publish_scope_catalog", "decision_point": "federate_export", "action": "publish_federation_catalog", "expected_decision": "hard_gate"},
     {"case_id": "import_scope_catalog", "decision_point": "federate_import", "action": "import_federation_catalog", "expected_decision": "require_review"},
     {"case_id": "manage_federation_subscription", "decision_point": "act", "action": "manage_federation_subscription", "expected_decision": "require_review"},
-    {"case_id": "export_incremental_changes", "decision_point": "federate_export", "action": "export_incremental_changes", "expected_decision": "hard_gate"},
+    {"case_id": "export_incremental_changes", "decision_point": "federate_export", "action": "export_incremental_changes", "expected_decision": "require_review"},
     {"case_id": "import_incremental_changes", "decision_point": "federate_import", "action": "import_incremental_changes", "expected_decision": "require_review"},
     {"case_id": "record_federation_feedback", "decision_point": "propose", "action": "record_federation_feedback", "expected_decision": "require_review"},
     {"case_id": "transfer_knowledge_custody", "decision_point": "act", "action": "transfer_knowledge_custody", "expected_decision": "hard_gate"},

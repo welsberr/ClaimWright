@@ -40,3 +40,9 @@ rules:
     default_decision: require_review
     obligations: [apply_receiver_release_cap, prevent_protected_topic_inference, preserve_catalog_signature]
     required_reviewers: [scope-steward]
+  - id: subscription_purpose_and_routing
+    decision_points: [act, federate_export, federate_import]
+    actions: [manage_federation_subscription, export_incremental_changes, import_incremental_changes]
+    default_decision: require_review
+    required_reviewers: [scope-steward]
+    obligations: [record_subscription_purpose, bound_change_scope, prevent_silent_auto_promotion, verify_before_acknowledgement]

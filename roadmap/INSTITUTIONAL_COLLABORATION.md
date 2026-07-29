@@ -163,6 +163,20 @@ Do not implement ClaimWright action mappings ahead of the corresponding
 GroundRecall contract fixture. Commit each ClaimWright slice with the matching
 `IF-##` identifier and report its GroundRecall dependency.
 
+### IF-06 Status
+
+Status (2026-07-29): the collaboration policy now covers GroundRecall's
+file-based incremental subscription transport. The policy requires scope-steward
+review for subscription management, incremental export, and incremental import;
+it records obligations for subscription purpose, bounded change scope, verified
+acknowledgement, and prevention of silent auto-promotion from quarantined
+bundles.
+
+The corresponding GroundRecall dependency is `IF-06` in
+`docs/institutional-federation-implementation-roadmap.md`, where signed,
+cursor-bounded change bundles and replay-safe quarantine imports are
+implemented.
+
 ## Acceptance
 
 ClaimWright's institutional policy work is complete when:

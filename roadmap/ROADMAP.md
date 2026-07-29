@@ -121,6 +121,9 @@ Design constraints:
 - Integrations with GroundRecall and CiteGeist should exchange reviewed claim,
   citation, and source-support state by stable IDs rather than copying private
   evidence text unnecessarily.
+- GroundRecall institutional federation currently includes IF-06 policy
+  coverage for subscription management, signed incremental exports, verified
+  quarantine imports, and acknowledgement before cursor advancement.
 
 Acceptance criteria:
 
