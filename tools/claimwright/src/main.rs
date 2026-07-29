@@ -18,6 +18,7 @@ const REQUIRED_FILES: &[&str] = &[
     "roles/knowledge-base-maintainer.md",
     "roles/citation-reviewer.md",
     "roles/publication-gatekeeper.md",
+    "roles/prior-work-reviewer.md",
     "schemas/claim-record.schema.json",
     "schemas/citation-review.schema.json",
     "sources/pennock-scientific-virtues.md",

@@ -11,6 +11,8 @@ defaults:
   private_exploratory_work: advisory
   costly_or_capacity_threatening_work: soft_gate
   durable_memory_changes: soft_gate
+  institutional_shared_work: soft_gate
+  prior_work_review: soft_gate
   public_release: hard_gate
 hard_gates:
   - id: unresolved_high_risk_public_claim
@@ -30,4 +32,3 @@ protected_resources:
   - gpu_availability
   - wall_clock_time
   - parallel_work_capacity
-

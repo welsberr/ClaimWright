@@ -45,6 +45,18 @@ principles:
     name: Practicality
     rule: Policy checks should reduce review burden over time and avoid excessive ceremony.
     enforcement_default: advisory
+  - id: institutional_scope_discipline
+    name: Institutional Scope Discipline
+    rule: Durable shared work must identify its destination scope, provenance, review state, and release level.
+    enforcement_default: soft_gate
+  - id: negative_result_preservation
+    name: Negative Result Preservation
+    rule: Failed, inconclusive, rejected, and superseded work must remain discoverable with its outcome and review context.
+    enforcement_default: soft_gate
+  - id: prior_work_review
+    name: Prior Work Review
+    rule: Costly or durable initiatives should check relevant prior work before repeating an explored approach.
+    enforcement_default: soft_gate
 scientific_virtues:
   - curiosity
   - veracity
