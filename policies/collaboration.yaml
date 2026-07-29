@@ -29,3 +29,8 @@ rules:
     actions: [propose_group_contribution, review_group_contribution, accept_group_contribution, withdraw_knowledge_release]
     default_decision: require_review
     obligations: [preserve_decision_rationale, preserve_rejected_alternatives]
+  - id: prior_work_review
+    decision_points: [query, propose]
+    actions: [prior_work_review, initiate_durable_work]
+    default_decision: require_review
+    obligations: [record_prior_work_query, preserve_negative_results, review_similarity_candidates]

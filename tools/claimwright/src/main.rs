@@ -114,6 +114,7 @@ fn main() {
             "negative_result_preservation",
             "stewardship_required",
             "rationale_preservation",
+            "prior_work_review",
         ] {
             if !text.contains(marker) {
                 failures.push(format!(

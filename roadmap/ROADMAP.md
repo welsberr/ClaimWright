@@ -55,6 +55,8 @@ cross-repository work-package authority is GroundRecall's
 - IF-02 collaborative policy module, contribution checks, and group/stewardship
   role cards for scope, provenance, negative-result, review, and continuity
   discipline.
+- IF-04 prior-work review policy rule requiring a bounded review query and
+  preservation of negative or inconclusive results.
 - Human-readable MOU.
 - Machine-readable principles, claim states, and enforcement defaults.
 - Pre-action and post-action checklists.
