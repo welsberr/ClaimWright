@@ -117,6 +117,7 @@ fn main() {
             "prior_work_review",
             "catalog_least_disclosure",
             "subscription_purpose_and_routing",
+            "multi_party_review_feedback",
         ] {
             if !text.contains(marker) {
                 failures.push(format!(

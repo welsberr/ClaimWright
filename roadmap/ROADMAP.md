@@ -124,6 +124,9 @@ Design constraints:
 - GroundRecall institutional federation currently includes IF-06 policy
   coverage for subscription management, signed incremental exports, verified
   quarantine imports, and acknowledgement before cursor advancement.
+- GroundRecall institutional federation currently includes IF-07 policy
+  coverage for generalized review receipts, quorum and independence evaluation,
+  dissent-preserving feedback, and signed feedback bundles.
 
 Acceptance criteria:
 

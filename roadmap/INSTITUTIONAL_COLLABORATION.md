@@ -177,6 +177,20 @@ The corresponding GroundRecall dependency is `IF-06` in
 cursor-bounded change bundles and replay-safe quarantine imports are
 implemented.
 
+### IF-07 Status
+
+Status (2026-07-29): the collaboration policy now covers GroundRecall's
+multi-party review and federation-feedback slice. The policy requires
+scope-steward and group-reviewer review for group review, high-risk acceptance,
+and federation feedback, with obligations for risk-based quorum, independent
+high-risk review, dissent/minority-position preservation, conflict disclosure,
+and appeal preservation.
+
+The corresponding GroundRecall dependency is `IF-07` in
+`docs/institutional-federation-implementation-roadmap.md`, where generalized
+review receipts, quorum evaluation, signed feedback bundles, and unresolved
+disagreement summaries are implemented as a partial slice.
+
 ## Acceptance
 
 ClaimWright's institutional policy work is complete when:

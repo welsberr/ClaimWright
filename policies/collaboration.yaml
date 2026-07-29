@@ -46,3 +46,9 @@ rules:
     default_decision: require_review
     required_reviewers: [scope-steward]
     obligations: [record_subscription_purpose, bound_change_scope, prevent_silent_auto_promotion, verify_before_acknowledgement]
+  - id: multi_party_review_feedback
+    decision_points: [review, promote, propose, adjudicate]
+    actions: [review_group_contribution, accept_group_contribution, record_federation_feedback]
+    default_decision: require_review
+    required_reviewers: [scope-steward, group-reviewer]
+    obligations: [evaluate_quorum_by_risk, require_independent_high_risk_review, preserve_dissent_and_minority_position, disclose_conflict_of_interest, preserve_appeal_path]
