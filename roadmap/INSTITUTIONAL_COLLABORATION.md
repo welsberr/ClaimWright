@@ -228,6 +228,19 @@ The corresponding GroundRecall dependency is `IF-10` in
 signed release packs and signed withdrawal notices are implemented as a partial
 slice.
 
+### IF-11 Status
+
+Status (2026-07-29): ClaimWright now carries stable GroundRecall MCP policy
+response fixtures. The fixture examples label policy findings as findings, not
+permission grants, and include no-write contribution proposal, explicit
+stewardship/no-ranking, and publication-gatekeeper scenarios.
+
+The corresponding GroundRecall dependency is `IF-11` in
+`docs/institutional-federation-implementation-roadmap.md`, where prior-work,
+catalog discovery, subscription status, impact report, stewardship/orphan
+review, and no-write contribution proposal MCP tools are implemented as a
+partial slice.
+
 ## Acceptance
 
 ClaimWright's institutional policy work is complete when:

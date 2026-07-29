@@ -1,0 +1,33 @@
+{
+  "schema_version": "claimwright.groundrecall_mcp_policy_responses.v1",
+  "responses": [
+    {
+      "tool": "prior_work_review",
+      "decision_point": "query",
+      "action": "prior_work_review",
+      "expected_decision": "require_review",
+      "finding_kind": "policy_finding_not_permission_grant"
+    },
+    {
+      "tool": "propose_contribution",
+      "decision_point": "propose",
+      "action": "propose_group_contribution",
+      "expected_decision": "require_review",
+      "finding_kind": "draft_only_no_canonical_write"
+    },
+    {
+      "tool": "stewardship_orphans",
+      "decision_point": "query",
+      "action": "generate_stewardship_view",
+      "expected_decision": "require_review",
+      "finding_kind": "explicit_stewardship_no_activity_ranking"
+    },
+    {
+      "tool": "release_pack_review",
+      "decision_point": "publish",
+      "action": "publish_knowledge_release_pack",
+      "expected_decision": "hard_gate",
+      "finding_kind": "publication_gatekeeper_required"
+    }
+  ]
+}

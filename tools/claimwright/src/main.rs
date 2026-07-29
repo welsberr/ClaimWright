@@ -31,6 +31,7 @@ const REQUIRED_FILES: &[&str] = &[
     "sources/pennock-scientific-virtues.md",
     "roadmap/ROADMAP.md",
     "fixtures/groundrecall/institutional_policy_cases.json",
+    "fixtures/groundrecall/mcp_policy_responses.json",
 ];
 
 const INSTITUTIONAL_POLICY_ACTIONS: &[&str] = &[
@@ -175,6 +176,21 @@ fn main() {
                 failures.push(
                     "institutional policy fixture has an invalid expected decision".to_string(),
                 );
+            }
+        }
+    }
+
+    let mcp_fixture = root.join("fixtures/groundrecall/mcp_policy_responses.json");
+    if let Ok(text) = fs::read_to_string(&mcp_fixture) {
+        for marker in [
+            "claimwright.groundrecall_mcp_policy_responses.v1",
+            "policy_finding_not_permission_grant",
+            "draft_only_no_canonical_write",
+            "explicit_stewardship_no_activity_ranking",
+            "publication_gatekeeper_required",
+        ] {
+            if !text.contains(marker) {
+                failures.push(format!("MCP policy fixture missing marker: {}", marker));
             }
         }
     }

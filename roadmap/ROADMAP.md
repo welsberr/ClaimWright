@@ -136,6 +136,9 @@ Design constraints:
 - GroundRecall institutional federation currently includes IF-10 policy
   coverage for deterministic signed release packs, license/attribution gates,
   redacted provenance, superseding pack links, and signed withdrawal notices.
+- GroundRecall institutional federation currently includes IF-11 MCP coverage
+  for prior work, catalog discovery, subscription status, impact reports,
+  stewardship/orphan review, and no-write contribution proposal drafts.
 
 Acceptance criteria:
 
