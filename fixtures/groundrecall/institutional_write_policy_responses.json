@@ -1,0 +1,30 @@
+{
+  "schema_version": "claimwright.groundrecall_institutional_write_policy_responses.v1",
+  "groundrecall_surface": "python_api.institutional_write",
+  "responses": [
+    {
+      "route_id": "python_api.institutional.save_records",
+      "decision_point": "propose",
+      "action": "save_institutional_record",
+      "expected_blocking_decisions": ["deny", "hard_gate"],
+      "finding_kind": "durable_institutional_write_gate",
+      "expectation": "Policy deny and hard_gate results block before scope, work, decision, contribution, stewardship, custody-event, or receipt writes."
+    },
+    {
+      "route_id": "python_api.institutional.transition_contribution",
+      "decision_point": "review",
+      "action": "review_group_contribution",
+      "expected_blocking_decisions": ["deny", "hard_gate"],
+      "finding_kind": "contribution_transition_write_gate",
+      "expectation": "Policy deny and hard_gate results block before contribution state changes or contribution-review receipt writes."
+    },
+    {
+      "route_id": "python_api.institutional.low_level_store_methods",
+      "decision_point": "propose",
+      "action": "trusted_internal_store_write",
+      "expected_blocking_decisions": [],
+      "finding_kind": "trusted_primitive_not_public_authority_surface",
+      "expectation": "Direct GroundRecall store methods remain trusted low-level primitives; coding agents should use policy-gated institutional write helpers."
+    }
+  ]
+}

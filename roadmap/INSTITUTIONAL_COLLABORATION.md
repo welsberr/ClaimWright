@@ -257,6 +257,20 @@ The corresponding GroundRecall dependency is `IF-12` in
 conformance evidence report maps scenarios to capability IDs, policy actions,
 policy coverage routes, code/test/doc evidence, and caveats.
 
+### IF-13 Status
+
+Status (2026-07-29): ClaimWright now carries institutional write policy
+response fixtures for GroundRecall's policy-gated Python API helpers. The
+fixture states that policy `deny` and `hard_gate` results block before durable
+institutional record writes and before contribution transition receipt writes.
+It also preserves the boundary that direct GroundRecall store methods are
+trusted low-level primitives, not public authority surfaces for assistants.
+
+The corresponding GroundRecall dependency is `IF-13` in
+`docs/institutional-federation-implementation-roadmap.md`, where
+`src/groundrecall/institutional_write.py` provides policy-gated write helpers
+for coding agents.
+
 ## Acceptance
 
 ClaimWright's institutional policy work is complete when:

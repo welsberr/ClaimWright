@@ -143,6 +143,9 @@ Design constraints:
   evidence mapping for group knowledge propagation, silo reduction, duplicate
   effort avoidance, tenancy/host continuity, controlled release/withdrawal, and
   policy-governed assistant surfaces.
+- GroundRecall institutional federation currently includes IF-13 policy-gated
+  Python API helpers for durable institutional record writes and contribution
+  transition receipt writes.
 
 Acceptance criteria:
 

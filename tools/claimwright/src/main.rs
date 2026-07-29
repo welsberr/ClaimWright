@@ -33,6 +33,7 @@ const REQUIRED_FILES: &[&str] = &[
     "fixtures/groundrecall/institutional_policy_cases.json",
     "fixtures/groundrecall/mcp_policy_responses.json",
     "fixtures/groundrecall/institutional_conformance_scenarios.json",
+    "fixtures/groundrecall/institutional_write_policy_responses.json",
 ];
 
 const INSTITUTIONAL_POLICY_ACTIONS: &[&str] = &[
@@ -213,6 +214,26 @@ fn main() {
             if !text.contains(marker) {
                 failures.push(format!(
                     "institutional conformance fixture missing marker: {}",
+                    marker
+                ));
+            }
+        }
+    }
+
+    let write_fixture =
+        root.join("fixtures/groundrecall/institutional_write_policy_responses.json");
+    if let Ok(text) = fs::read_to_string(&write_fixture) {
+        for marker in [
+            "claimwright.groundrecall_institutional_write_policy_responses.v1",
+            "python_api.institutional.save_records",
+            "python_api.institutional.transition_contribution",
+            "durable_institutional_write_gate",
+            "contribution_transition_write_gate",
+            "trusted_primitive_not_public_authority_surface",
+        ] {
+            if !text.contains(marker) {
+                failures.push(format!(
+                    "institutional write policy fixture missing marker: {}",
                     marker
                 ));
             }
