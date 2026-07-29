@@ -191,6 +191,19 @@ The corresponding GroundRecall dependency is `IF-07` in
 review receipts, quorum evaluation, signed feedback bundles, and unresolved
 disagreement summaries are implemented as a partial slice.
 
+### IF-08 Status
+
+Status (2026-07-29): the collaboration policy now hard-gates custody transfer
+and instance retirement with scope-steward, records-custodian, and
+tenancy-handoff-reviewer review. The policy adds obligations for complete
+custody handoff, least-necessary retention, confidentiality survival, erasure
+separation, attribution/correction rights, and orphan escalation.
+
+The corresponding GroundRecall dependency is `IF-08` in
+`docs/institutional-federation-implementation-roadmap.md`, where orphan
+stewardship reports, tenancy departure dry-runs, instance retirement dry-runs,
+and release-broadening custody guards are implemented as a partial slice.
+
 ## Acceptance
 
 ClaimWright's institutional policy work is complete when:

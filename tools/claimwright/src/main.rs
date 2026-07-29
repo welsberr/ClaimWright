@@ -25,6 +25,7 @@ const REQUIRED_FILES: &[&str] = &[
     "roles/group-reviewer.md",
     "roles/scope-steward.md",
     "roles/records-custodian.md",
+    "roles/tenancy-handoff-reviewer.md",
     "schemas/claim-record.schema.json",
     "schemas/citation-review.schema.json",
     "sources/pennock-scientific-virtues.md",
@@ -118,6 +119,7 @@ fn main() {
             "catalog_least_disclosure",
             "subscription_purpose_and_routing",
             "multi_party_review_feedback",
+            "custody_tenancy_retirement",
         ] {
             if !text.contains(marker) {
                 failures.push(format!(

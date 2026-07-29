@@ -127,6 +127,9 @@ Design constraints:
 - GroundRecall institutional federation currently includes IF-07 policy
   coverage for generalized review receipts, quorum and independence evaluation,
   dissent-preserving feedback, and signed feedback bundles.
+- GroundRecall institutional federation currently includes IF-08 policy
+  coverage for orphan stewardship reports, tenancy departure dry-runs, instance
+  retirement dry-runs, and custody transfer release-broadening guards.
 
 Acceptance criteria:
 

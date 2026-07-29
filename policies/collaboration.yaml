@@ -52,3 +52,9 @@ rules:
     default_decision: require_review
     required_reviewers: [scope-steward, group-reviewer]
     obligations: [evaluate_quorum_by_risk, require_independent_high_risk_review, preserve_dissent_and_minority_position, disclose_conflict_of_interest, preserve_appeal_path]
+  - id: custody_tenancy_retirement
+    decision_points: [act, delete]
+    actions: [transfer_knowledge_custody, retire_federation_instance]
+    default_decision: hard_gate
+    required_reviewers: [scope-steward, records-custodian, tenancy-handoff-reviewer]
+    obligations: [complete_custody_handoff, retain_least_necessary_records, preserve_confidentiality_after_departure, separate_erasure_from_retirement, preserve_attribution_and_correction_rights, escalate_orphaned_stewardship]
