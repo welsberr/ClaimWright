@@ -120,6 +120,7 @@ fn main() {
             "subscription_purpose_and_routing",
             "multi_party_review_feedback",
             "custody_tenancy_retirement",
+            "institutional_view_privacy_fairness",
         ] {
             if !text.contains(marker) {
                 failures.push(format!(

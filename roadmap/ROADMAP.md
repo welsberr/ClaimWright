@@ -130,6 +130,9 @@ Design constraints:
 - GroundRecall institutional federation currently includes IF-08 policy
   coverage for orphan stewardship reports, tenancy departure dry-runs, instance
   retirement dry-runs, and custody transfer release-broadening guards.
+- GroundRecall institutional federation currently includes IF-09 policy
+  coverage for release-capped orientation, impact, governance, and stewardship
+  views with explicit-basis labels and activity-ranking suppression.
 
 Acceptance criteria:
 

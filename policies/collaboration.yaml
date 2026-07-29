@@ -58,3 +58,9 @@ rules:
     default_decision: hard_gate
     required_reviewers: [scope-steward, records-custodian, tenancy-handoff-reviewer]
     obligations: [complete_custody_handoff, retain_least_necessary_records, preserve_confidentiality_after_departure, separate_erasure_from_retirement, preserve_attribution_and_correction_rights, escalate_orphaned_stewardship]
+  - id: institutional_view_privacy_fairness
+    decision_points: [query]
+    actions: [generate_scope_orientation, generate_stewardship_view, generate_change_impact_report]
+    default_decision: require_review
+    required_reviewers: [scope-steward]
+    obligations: [limit_view_to_declared_purpose, minimize_exposed_private_context, label_explicit_vs_inferred_basis, suppress_activity_ranking, preserve_correction_path]

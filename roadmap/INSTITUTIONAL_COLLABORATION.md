@@ -204,6 +204,18 @@ The corresponding GroundRecall dependency is `IF-08` in
 stewardship reports, tenancy departure dry-runs, instance retirement dry-runs,
 and release-broadening custody guards are implemented as a partial slice.
 
+### IF-09 Status
+
+Status (2026-07-29): the collaboration policy now covers institutional-view
+privacy and fairness for scope orientation, stewardship views, and change-impact
+reports. The policy requires purpose limitation, minimization, explicit
+basis-labeling, activity-ranking suppression, and correction-path preservation.
+
+The corresponding GroundRecall dependency is `IF-09` in
+`docs/institutional-federation-implementation-roadmap.md`, where release-capped
+orientation, impact, governance, and stewardship views are implemented as a
+partial slice.
+
 ## Acceptance
 
 ClaimWright's institutional policy work is complete when:
