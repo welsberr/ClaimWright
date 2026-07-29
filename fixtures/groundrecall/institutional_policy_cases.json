@@ -1,0 +1,24 @@
+{
+  "schema_version": "groundrecall.institutional_policy_fixtures.v1",
+  "policy_id": "claimwright.institutional.collaboration.v0",
+  "cases": [
+    {"case_id": "discover_scope_catalog", "decision_point": "query", "action": "discover_federation_catalog", "expected_decision": "allow"},
+    {"case_id": "read_protected_catalog_entry", "decision_point": "read", "action": "read_federation_catalog_entry", "expected_decision": "hard_gate"},
+    {"case_id": "propose_group_contribution", "decision_point": "propose", "action": "propose_group_contribution", "expected_decision": "require_review"},
+    {"case_id": "review_group_contribution", "decision_point": "review", "action": "review_group_contribution", "expected_decision": "require_review"},
+    {"case_id": "accept_group_contribution", "decision_point": "promote", "action": "accept_group_contribution", "expected_decision": "hard_gate"},
+    {"case_id": "publish_scope_catalog", "decision_point": "federate_export", "action": "publish_federation_catalog", "expected_decision": "hard_gate"},
+    {"case_id": "import_scope_catalog", "decision_point": "federate_import", "action": "import_federation_catalog", "expected_decision": "require_review"},
+    {"case_id": "manage_federation_subscription", "decision_point": "act", "action": "manage_federation_subscription", "expected_decision": "require_review"},
+    {"case_id": "export_incremental_changes", "decision_point": "federate_export", "action": "export_incremental_changes", "expected_decision": "hard_gate"},
+    {"case_id": "import_incremental_changes", "decision_point": "federate_import", "action": "import_incremental_changes", "expected_decision": "require_review"},
+    {"case_id": "record_federation_feedback", "decision_point": "propose", "action": "record_federation_feedback", "expected_decision": "require_review"},
+    {"case_id": "transfer_knowledge_custody", "decision_point": "act", "action": "transfer_knowledge_custody", "expected_decision": "hard_gate"},
+    {"case_id": "retire_federation_instance", "decision_point": "act", "action": "retire_federation_instance", "expected_decision": "hard_gate"},
+    {"case_id": "generate_scope_orientation", "decision_point": "query", "action": "generate_scope_orientation", "expected_decision": "require_review"},
+    {"case_id": "generate_stewardship_view", "decision_point": "query", "action": "generate_stewardship_view", "expected_decision": "hard_gate"},
+    {"case_id": "generate_change_impact_report", "decision_point": "query", "action": "generate_change_impact_report", "expected_decision": "require_review"},
+    {"case_id": "publish_knowledge_release_pack", "decision_point": "publish", "action": "publish_knowledge_release_pack", "expected_decision": "hard_gate"},
+    {"case_id": "withdraw_knowledge_release", "decision_point": "supersede", "action": "withdraw_knowledge_release", "expected_decision": "hard_gate"}
+  ]
+}

@@ -1,3 +1,4 @@
+use std::collections::HashSet;
 use std::env;
 use std::fs;
 use std::path::{Path, PathBuf};
@@ -21,6 +22,28 @@ const REQUIRED_FILES: &[&str] = &[
     "schemas/citation-review.schema.json",
     "sources/pennock-scientific-virtues.md",
     "roadmap/ROADMAP.md",
+    "fixtures/groundrecall/institutional_policy_cases.json",
+];
+
+const INSTITUTIONAL_POLICY_ACTIONS: &[&str] = &[
+    "discover_federation_catalog",
+    "read_federation_catalog_entry",
+    "propose_group_contribution",
+    "review_group_contribution",
+    "accept_group_contribution",
+    "publish_federation_catalog",
+    "import_federation_catalog",
+    "manage_federation_subscription",
+    "export_incremental_changes",
+    "import_incremental_changes",
+    "record_federation_feedback",
+    "transfer_knowledge_custody",
+    "retire_federation_instance",
+    "generate_scope_orientation",
+    "generate_stewardship_view",
+    "generate_change_impact_report",
+    "publish_knowledge_release_pack",
+    "withdraw_knowledge_release",
 ];
 
 const REQUIRED_MOU_TERMS: &[&str] = &[
@@ -71,6 +94,53 @@ fn main() {
         ] {
             if !text.contains(gate) {
                 failures.push(format!("enforcement.yaml missing hard gate: {}", gate));
+            }
+        }
+    }
+
+    let institutional_fixture = root.join("fixtures/groundrecall/institutional_policy_cases.json");
+    if let Ok(text) = fs::read_to_string(&institutional_fixture) {
+        if !text.contains("groundrecall.institutional_policy_fixtures.v1") {
+            failures.push("institutional policy fixture has an unknown schema version".to_string());
+        }
+        for action in INSTITUTIONAL_POLICY_ACTIONS {
+            if !text.contains(action) {
+                failures.push(format!(
+                    "institutional policy fixture missing action: {}",
+                    action
+                ));
+            }
+        }
+        let mut case_ids = HashSet::new();
+        for line in text.lines().filter(|line| line.contains("\"case_id\"")) {
+            if let Some(value) = line
+                .split("\"case_id\": \"")
+                .nth(1)
+                .and_then(|rest| rest.split('"').next())
+            {
+                if !case_ids.insert(value.to_string()) {
+                    failures.push(format!(
+                        "institutional policy fixture has duplicate case ID: {}",
+                        value
+                    ));
+                }
+            } else {
+                failures.push("institutional policy fixture has malformed case ID".to_string());
+            }
+        }
+        let allowed_decisions = ["allow", "require_review", "soft_gate", "hard_gate", "deny"];
+        for line in text
+            .lines()
+            .filter(|line| line.contains("\"expected_decision\""))
+        {
+            let value = line
+                .split("\"expected_decision\": \"")
+                .nth(1)
+                .and_then(|rest| rest.split('"').next());
+            if !value.is_some_and(|item| allowed_decisions.contains(&item)) {
+                failures.push(
+                    "institutional policy fixture has an invalid expected decision".to_string(),
+                );
             }
         }
     }
