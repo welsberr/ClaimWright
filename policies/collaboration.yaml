@@ -64,3 +64,9 @@ rules:
     default_decision: require_review
     required_reviewers: [scope-steward]
     obligations: [limit_view_to_declared_purpose, minimize_exposed_private_context, label_explicit_vs_inferred_basis, suppress_activity_ranking, preserve_correction_path]
+  - id: license_aware_release_withdrawal
+    decision_points: [publish, supersede]
+    actions: [publish_knowledge_release_pack, withdraw_knowledge_release]
+    default_decision: hard_gate
+    required_reviewers: [publication-gatekeeper, scope-steward]
+    obligations: [verify_license_compatibility, preserve_attribution, verify_release_authority, enforce_provenance_visibility, record_withdrawal_review]

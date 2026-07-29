@@ -121,6 +121,7 @@ fn main() {
             "multi_party_review_feedback",
             "custody_tenancy_retirement",
             "institutional_view_privacy_fairness",
+            "license_aware_release_withdrawal",
         ] {
             if !text.contains(marker) {
                 failures.push(format!(

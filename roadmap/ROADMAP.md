@@ -133,6 +133,9 @@ Design constraints:
 - GroundRecall institutional federation currently includes IF-09 policy
   coverage for release-capped orientation, impact, governance, and stewardship
   views with explicit-basis labels and activity-ranking suppression.
+- GroundRecall institutional federation currently includes IF-10 policy
+  coverage for deterministic signed release packs, license/attribution gates,
+  redacted provenance, superseding pack links, and signed withdrawal notices.
 
 Acceptance criteria:
 

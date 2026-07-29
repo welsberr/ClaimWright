@@ -216,6 +216,18 @@ The corresponding GroundRecall dependency is `IF-09` in
 orientation, impact, governance, and stewardship views are implemented as a
 partial slice.
 
+### IF-10 Status
+
+Status (2026-07-29): the collaboration policy now hard-gates public/internal
+release packs and withdrawal with publication-gatekeeper and scope-steward
+review. The policy requires license compatibility, attribution preservation,
+release authority, provenance visibility enforcement, and withdrawal review.
+
+The corresponding GroundRecall dependency is `IF-10` in
+`docs/institutional-federation-implementation-roadmap.md`, where deterministic
+signed release packs and signed withdrawal notices are implemented as a partial
+slice.
+
 ## Acceptance
 
 ClaimWright's institutional policy work is complete when:
