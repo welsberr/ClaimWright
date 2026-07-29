@@ -1,0 +1,30 @@
+{
+  "schema_version": "claimwright.groundrecall_custody_policy_responses.v1",
+  "groundrecall_surface": "python_api.custody.record_event",
+  "responses": [
+    {
+      "route_id": "python_api.custody.record_event",
+      "decision_point": "act",
+      "action": "transfer_knowledge_custody",
+      "expected_blocking_decisions": ["deny", "hard_gate"],
+      "finding_kind": "custody_event_policy_preflight",
+      "expectation": "Policy deny and hard_gate results block before append-only custody-event writes."
+    },
+    {
+      "route_id": "python_api.custody.release_broadening_guard",
+      "decision_point": "act",
+      "action": "transfer_knowledge_custody",
+      "expected_blocking_decisions": ["hard_gate"],
+      "finding_kind": "custody_event_release_broadening_guard",
+      "expectation": "Custody events cannot broaden release level relative to the subject record without separate declassification authority."
+    },
+    {
+      "route_id": "python_api.custody.role_authority_validation",
+      "decision_point": "act",
+      "action": "transfer_knowledge_custody",
+      "expected_blocking_decisions": ["require_review", "hard_gate"],
+      "finding_kind": "role_authority_follow_up",
+      "expectation": "Explicit role and authority validation remains a follow-up beyond policy-provider preflight."
+    }
+  ]
+}

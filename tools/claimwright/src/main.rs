@@ -34,6 +34,7 @@ const REQUIRED_FILES: &[&str] = &[
     "fixtures/groundrecall/mcp_policy_responses.json",
     "fixtures/groundrecall/institutional_conformance_scenarios.json",
     "fixtures/groundrecall/institutional_write_policy_responses.json",
+    "fixtures/groundrecall/custody_policy_responses.json",
 ];
 
 const INSTITUTIONAL_POLICY_ACTIONS: &[&str] = &[
@@ -236,6 +237,21 @@ fn main() {
                     "institutional write policy fixture missing marker: {}",
                     marker
                 ));
+            }
+        }
+    }
+
+    let custody_fixture = root.join("fixtures/groundrecall/custody_policy_responses.json");
+    if let Ok(text) = fs::read_to_string(&custody_fixture) {
+        for marker in [
+            "claimwright.groundrecall_custody_policy_responses.v1",
+            "python_api.custody.record_event",
+            "custody_event_policy_preflight",
+            "custody_event_release_broadening_guard",
+            "role_authority_follow_up",
+        ] {
+            if !text.contains(marker) {
+                failures.push(format!("custody policy fixture missing marker: {}", marker));
             }
         }
     }

@@ -271,6 +271,19 @@ The corresponding GroundRecall dependency is `IF-13` in
 `src/groundrecall/institutional_write.py` provides policy-gated write helpers
 for coding agents.
 
+### IF-14 Status
+
+Status (2026-07-29): ClaimWright now carries custody policy response fixtures
+for GroundRecall's `record_custody_event` preflight. The fixture states that
+policy `deny` and `hard_gate` results block before append-only custody-event
+writes, release broadening remains guarded, and explicit role/authority
+validation remains a follow-up item.
+
+The corresponding GroundRecall dependency is `IF-14` in
+`docs/institutional-federation-implementation-roadmap.md`, where
+`record_custody_event` accepts an optional policy provider before persisting
+custody events.
+
 ## Acceptance
 
 ClaimWright's institutional policy work is complete when:

@@ -146,6 +146,9 @@ Design constraints:
 - GroundRecall institutional federation currently includes IF-13 policy-gated
   Python API helpers for durable institutional record writes and contribution
   transition receipt writes.
+- GroundRecall institutional federation currently includes IF-14 custody-event
+  policy preflight before append-only custody-event writes, while explicit
+  role/authority validation remains follow-up work.
 
 Acceptance criteria:
 
