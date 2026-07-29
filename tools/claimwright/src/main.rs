@@ -105,6 +105,25 @@ fn main() {
         }
     }
 
+    let collaboration = root.join("policies/collaboration.yaml");
+    if let Ok(text) = fs::read_to_string(&collaboration) {
+        for marker in [
+            "claimwright.collaboration_policy.v1",
+            "destination_scope_required",
+            "contribution_review_separation",
+            "negative_result_preservation",
+            "stewardship_required",
+            "rationale_preservation",
+        ] {
+            if !text.contains(marker) {
+                failures.push(format!(
+                    "collaboration.yaml missing required marker: {}",
+                    marker
+                ));
+            }
+        }
+    }
+
     let institutional_fixture = root.join("fixtures/groundrecall/institutional_policy_cases.json");
     if let Ok(text) = fs::read_to_string(&institutional_fixture) {
         if !text.contains("groundrecall.institutional_policy_fixtures.v1") {
