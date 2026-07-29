@@ -21,6 +21,8 @@ hard_gates:
     description: Citation is fabricated, unverifiable, or metadata-conflicted.
   - id: private_material_publication
     description: Public artifact includes private material, secrets, local paths, or unpublished sensitive notes.
+  - id: local_path_publication
+    description: Public artifact exposes local absolute filesystem paths, usernames, home directories, temporary paths, file:// links, internal hostnames, private repository paths, or unpublished note/store paths.
   - id: destructive_irreversible_action
     description: Action is destructive and cannot be rolled back to a known-good state.
   - id: contradicted_or_stale_claim

@@ -10,6 +10,8 @@ checks:
     question: What assumptions remain visible and reviewable?
   - id: unresolved_risks
     question: What risks, contradictions, stale claims, or private/public issues remain?
+  - id: public_artifact_leak_scan
+    question: Were all public-facing rendered artifacts, including Markdown, HTML, PDF extracted text, exports, and review appendices, scanned for local paths, secrets, private URLs, internal hostnames, usernames, temporary paths, file:// links, and unpublished note/store references?
   - id: tasks_opened
     question: Were follow-up tasks opened for global knowledge-base impact?
   - id: capacity_used
@@ -20,4 +22,3 @@ checks:
     question: Is a broader knowledge-base impact review needed after the current task?
   - id: scientific_virtues
     question: Did the completed action preserve honesty, humility, rigor, skepticism, transparency, and openness to correction?
-

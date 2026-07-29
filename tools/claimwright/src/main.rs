@@ -101,11 +101,21 @@ fn main() {
             "unresolved_high_risk_public_claim",
             "fabricated_or_unverified_citation",
             "private_material_publication",
+            "local_path_publication",
             "destructive_irreversible_action",
             "contradicted_or_stale_claim",
         ] {
             if !text.contains(gate) {
                 failures.push(format!("enforcement.yaml missing hard gate: {}", gate));
+            }
+        }
+    }
+
+    let post_action = root.join("checks/post_action.yaml");
+    if let Ok(text) = fs::read_to_string(&post_action) {
+        for check in ["public_artifact_leak_scan"] {
+            if !text.contains(check) {
+                failures.push(format!("post_action.yaml missing required check: {}", check));
             }
         }
     }
