@@ -1,0 +1,16 @@
+schema_version: claimwright.institutional_contribution_checks.v1
+checks:
+  - id: destination_scope
+    question: Is the contribution's destination group, project, or entity scope explicit?
+  - id: provenance_and_hashes
+    question: Are origin identity, stable record IDs, immutable content hashes, and provenance visibility recorded?
+  - id: release_classification
+    question: Is the proposed release level no broader than the contributed basis?
+  - id: negative_result
+    question: Are failed, inconclusive, rejected, and superseded outcomes preserved?
+  - id: reviewer_separation
+    question: Is the approver distinct from the contributor when required by risk policy?
+  - id: stewardship
+    question: Is an accountable steward assigned or is the handoff explicitly open?
+  - id: rationale
+    question: Does the review preserve decision rationale, alternatives, and unresolved dissent?

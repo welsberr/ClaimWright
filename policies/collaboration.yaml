@@ -1,0 +1,31 @@
+schema_version: claimwright.collaboration_policy.v1
+policy_id: claimwright.collaboration.institutional.v1
+version: 0.1
+rules:
+  - id: destination_scope_required
+    decision_points: [propose, review, promote]
+    actions: [propose_group_contribution, review_group_contribution, accept_group_contribution]
+    default_decision: hard_gate
+    obligations: [record_destination_scope, record_release_level, preserve_provenance]
+  - id: contribution_review_separation
+    decision_points: [promote, adjudicate]
+    actions: [accept_group_contribution]
+    default_decision: require_review
+    required_reviewers: [group-reviewer]
+    obligations: [separate_contributor_from_approver, record_review_receipt]
+  - id: negative_result_preservation
+    decision_points: [propose, promote]
+    actions: [propose_group_contribution, accept_group_contribution]
+    default_decision: soft_gate
+    obligations: [preserve_failed_or_inconclusive_outcome]
+  - id: stewardship_required
+    decision_points: [promote, act]
+    actions: [accept_group_contribution, transfer_knowledge_custody]
+    default_decision: hard_gate
+    required_reviewers: [scope-steward, records-custodian]
+    obligations: [assign_group_steward, record_custody_authority]
+  - id: rationale_preservation
+    decision_points: [propose, review, promote, supersede]
+    actions: [propose_group_contribution, review_group_contribution, accept_group_contribution, withdraw_knowledge_release]
+    default_decision: require_review
+    obligations: [preserve_decision_rationale, preserve_rejected_alternatives]
