@@ -32,6 +32,7 @@ const REQUIRED_FILES: &[&str] = &[
     "roadmap/ROADMAP.md",
     "fixtures/groundrecall/institutional_policy_cases.json",
     "fixtures/groundrecall/mcp_policy_responses.json",
+    "fixtures/groundrecall/institutional_conformance_scenarios.json",
 ];
 
 const INSTITUTIONAL_POLICY_ACTIONS: &[&str] = &[
@@ -191,6 +192,29 @@ fn main() {
         ] {
             if !text.contains(marker) {
                 failures.push(format!("MCP policy fixture missing marker: {}", marker));
+            }
+        }
+    }
+
+    let conformance_fixture =
+        root.join("fixtures/groundrecall/institutional_conformance_scenarios.json");
+    if let Ok(text) = fs::read_to_string(&conformance_fixture) {
+        for marker in [
+            "claimwright.groundrecall_institutional_conformance_scenarios.v1",
+            "groundrecall.institutional_conformance.v1",
+            "group_knowledge_propagation",
+            "silo_reduction_and_discovery",
+            "duplicate_effort_avoidance",
+            "knowledge_survival_after_tenancy_or_host_change",
+            "controlled_reuse_and_public_release",
+            "policy_governed_assistant_surface",
+            "not production certification or permission grants",
+        ] {
+            if !text.contains(marker) {
+                failures.push(format!(
+                    "institutional conformance fixture missing marker: {}",
+                    marker
+                ));
             }
         }
     }

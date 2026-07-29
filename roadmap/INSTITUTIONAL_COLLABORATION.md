@@ -241,6 +241,22 @@ catalog discovery, subscription status, impact report, stewardship/orphan
 review, and no-write contribution proposal MCP tools are implemented as a
 partial slice.
 
+### IF-12 Status
+
+Status (2026-07-29): ClaimWright now carries institutional conformance scenario
+fixtures for GroundRecall's IF-12 evidence report. The fixture maps
+group-knowledge propagation, silo reduction/discovery, duplicate-effort
+avoidance, tenancy/host continuity, controlled release/withdrawal, and
+policy-governed assistant surfaces to ClaimWright policy modules and expected
+partial status. The checker validates the fixture markers and preserves the
+boundary that conformance evidence is not production certification or a
+permission grant.
+
+The corresponding GroundRecall dependency is `IF-12` in
+`docs/institutional-federation-implementation-roadmap.md`, where a deterministic
+conformance evidence report maps scenarios to capability IDs, policy actions,
+policy coverage routes, code/test/doc evidence, and caveats.
+
 ## Acceptance
 
 ClaimWright's institutional policy work is complete when:

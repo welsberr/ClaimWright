@@ -139,6 +139,10 @@ Design constraints:
 - GroundRecall institutional federation currently includes IF-11 MCP coverage
   for prior work, catalog discovery, subscription status, impact reports,
   stewardship/orphan review, and no-write contribution proposal drafts.
+- GroundRecall institutional federation currently includes IF-12 conformance
+  evidence mapping for group knowledge propagation, silo reduction, duplicate
+  effort avoidance, tenancy/host continuity, controlled release/withdrawal, and
+  policy-governed assistant surfaces.
 
 Acceptance criteria:
 

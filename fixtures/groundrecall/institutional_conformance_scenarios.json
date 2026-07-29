@@ -1,0 +1,50 @@
+{
+  "schema_version": "claimwright.groundrecall_institutional_conformance_scenarios.v1",
+  "groundrecall_schema_version": "groundrecall.institutional_conformance.v1",
+  "roadmap_package": "IF-12",
+  "claim_boundary": "The scenarios are evidence mappings and policy examples, not production certification or permission grants.",
+  "scenarios": [
+    {
+      "scenario_id": "group_knowledge_propagation",
+      "expected_status": "partial",
+      "policy_modules": ["collaboration.contribution", "collaboration.review"],
+      "groundrecall_actions": ["propose_group_contribution", "review_group_contribution", "accept_group_contribution"],
+      "claimwright_expectation": "preserve separation between proposal, review finding, and local authority"
+    },
+    {
+      "scenario_id": "silo_reduction_and_discovery",
+      "expected_status": "partial",
+      "policy_modules": ["institutional.discovery"],
+      "groundrecall_actions": ["discover_federation_catalog", "read_federation_catalog_entry", "manage_federation_subscription"],
+      "claimwright_expectation": "apply least-disclosure catalog and subscription-purpose checks"
+    },
+    {
+      "scenario_id": "duplicate_effort_avoidance",
+      "expected_status": "partial",
+      "policy_modules": ["institutional.prior_work"],
+      "groundrecall_actions": ["propose_group_contribution", "generate_scope_orientation"],
+      "claimwright_expectation": "require proportional prior-work review and preserve negative or inconclusive results"
+    },
+    {
+      "scenario_id": "knowledge_survival_after_tenancy_or_host_change",
+      "expected_status": "partial",
+      "policy_modules": ["institutional.stewardship"],
+      "groundrecall_actions": ["transfer_knowledge_custody", "retire_federation_instance", "generate_stewardship_view"],
+      "claimwright_expectation": "require explicit custody, tenancy handoff, orphan escalation, and confidentiality survival"
+    },
+    {
+      "scenario_id": "controlled_reuse_and_public_release",
+      "expected_status": "partial",
+      "policy_modules": ["institutional.release"],
+      "groundrecall_actions": ["publish_knowledge_release_pack", "withdraw_knowledge_release"],
+      "claimwright_expectation": "hard-gate publication and withdrawal on license, attribution, provenance, and release authority review"
+    },
+    {
+      "scenario_id": "policy_governed_assistant_surface",
+      "expected_status": "partial",
+      "policy_modules": ["institutional.discovery", "institutional.stewardship", "institutional.privacy_and_fairness"],
+      "groundrecall_actions": ["discover_federation_catalog", "propose_group_contribution", "generate_change_impact_report", "generate_stewardship_view"],
+      "claimwright_expectation": "return machine-readable policy findings without treating findings as permission grants"
+    }
+  ]
+}
