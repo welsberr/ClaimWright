@@ -40,6 +40,13 @@ plugins, for example:
 - adversarial-review policy;
 - private/public-boundary policy.
 
+The collaborative group and institutional policy modules, stable reason-code
+families, role cards, compatibility fixtures, and implementation order are
+specified in
+[`INSTITUTIONAL_COLLABORATION.md`](INSTITUTIONAL_COLLABORATION.md). Its
+cross-repository work-package authority is GroundRecall's
+`docs/institutional-federation-implementation-roadmap.md`.
+
 ## Implemented In This Draft
 
 - Human-readable MOU.
