@@ -49,6 +49,9 @@ cross-repository work-package authority is GroundRecall's
 
 ## Implemented In This Draft
 
+- IF-00 GroundRecall policy-compatibility fixture covering the institutional
+  federation action map, with schema/action/duplicate-ID validation in the
+  checker.
 - Human-readable MOU.
 - Machine-readable principles, claim states, and enforcement defaults.
 - Pre-action and post-action checklists.
