@@ -1,0 +1,64 @@
+{
+  "agentos_version": "0.1",
+  "scope": "project",
+  "owner": "human collaborator",
+  "last_reviewed": "2026-07-31",
+  "purpose": "Run ClaimWright academic-publication-integrity roadmap work as bounded, sequential, reviewable agent tasks.",
+  "sources_of_truth": [
+    "roadmap/ACADEMIC_PUBLICATION_INTEGRITY_IMPLEMENTATION.md",
+    "policies/academic_publication.yaml",
+    "schemas/publication-integrity-review.schema.json",
+    "roadmap/ROADMAP.md",
+    "MOU.md"
+  ],
+  "roles": [
+    ".agentos/roles/claimwright-roadmap-implementer.md"
+  ],
+  "memory": [
+    {
+      "id": "wp_run_logs",
+      "location": ".agentos/runs/",
+      "review_state": "private",
+      "retention": "until the human accepts the corresponding WP"
+    },
+    {
+      "id": "durable_decisions",
+      "location": ".agentos/decisions/",
+      "review_state": "draft until human approval",
+      "retention": "project lifetime"
+    }
+  ],
+  "connections": [
+    {
+      "id": "local_git",
+      "purpose": "inspect scoped changes and preserve unrelated worktree state",
+      "access": "local read/write",
+      "data_sensitivity": "project source"
+    },
+    {
+      "id": "cargo",
+      "purpose": "format, test, and check the Rust substrate",
+      "access": "local execution",
+      "data_sensitivity": "local source and build artifacts"
+    }
+  ],
+  "verification_checks": [
+    ".agentos/checks/wp-acceptance.yaml"
+  ],
+  "automations": [
+    ".agentos/automations/sequential-wp-runner.yaml"
+  ],
+  "public_private_policy": {
+    "public_allowed": [
+      "reviewed source changes",
+      "reviewed policy and schema documentation"
+    ],
+    "private_required": [
+      "agent run logs",
+      "unresolved findings",
+      "credentials",
+      "confidential manuscript content"
+    ],
+    "publish_requires_review": true
+  }
+}

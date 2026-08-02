@@ -1,0 +1,10 @@
+{
+  "schema_version": "claimwright.publication_gate_mcp.v1",
+  "surface": "claimwright.publication_gate",
+  "responses": [
+    {"case_id":"pass","decision":"pass","findings":[],"permission_grant":false},
+    {"case_id":"hard_gate","decision":"hard_gate","findings":[{"reason_code":"publication.similarity.unresolved_match","decision":"hard_gate"}],"permission_grant":false},
+    {"case_id":"invalid_input","decision":"invalid_input","findings":[{"reason_code":"publication.review.schema_invalid","decision":"invalid_input"}],"permission_grant":false}
+  ],
+  "invariants":["findings_are_not_permission_grants","hard_gate_is_never_converted_to_allow","human_publication_approval_remains_separate"]
+}

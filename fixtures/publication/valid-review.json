@@ -1,0 +1,27 @@
+{
+  "schema_version": "claimwright.publication_integrity_review.v1",
+  "artifact_id": "fixture-manuscript",
+  "artifact_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "artifact_text_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "release_scope": "fixture validation only",
+  "policy_id": "claimwright.academic_publication_integrity.v1",
+  "policy_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+  "tool_version": "claimwright-test",
+  "destination": "fixture repository",
+  "checks": [
+    {"id":"plagiarism_and_attribution","status":"pass","evidence":["reviewed"]},
+    {"id":"similarity_and_text_recycling","status":"pass","evidence":["reviewed"]},
+    {"id":"fabrication_falsification_and_manipulation","status":"pass","evidence":["reviewed"]},
+    {"id":"citation_and_source_integrity","status":"pass","evidence":["reviewed"]},
+    {"id":"authorship_contribution_and_ai_disclosure","status":"pass","evidence":["reviewed"]},
+    {"id":"copyright_license_and_permissions","status":"pass","evidence":["reviewed"]},
+    {"id":"ethics_consent_conflicts_and_funding","status":"documented_not_applicable","evidence":["not applicable"],"rationale":"No human or animal subjects."},
+    {"id":"confidentiality_and_private_material","status":"pass","evidence":["reviewed"]},
+    {"id":"harmful_or_unprofessional_content","status":"pass","evidence":["reviewed"]},
+    {"id":"venue_and_release_policy","status":"pass","evidence":["reviewed"]}
+  ],
+  "similarity_review": {"method":"offline fixture review","corpus_limitations":["fixture corpus only"],"material_matches":[]},
+  "decision":"pass",
+  "human_reviewer":"fixture-reviewer",
+  "reviewed_at":"2026-07-31T12:00:00Z"
+}

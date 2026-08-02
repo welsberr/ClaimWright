@@ -67,12 +67,18 @@ cross-repository work-package authority is GroundRecall's
 - Pennock scientific virtues source note.
 - Minimal Rust policy-substrate checker.
 - Public-safe artifact workflow example.
+- Academic-publication integrity policy, review-record schema, and
+  implementation plan. See
+  [`ACADEMIC_PUBLICATION_INTEGRITY_IMPLEMENTATION.md`](ACADEMIC_PUBLICATION_INTEGRITY_IMPLEMENTATION.md).
 
 ## Near-Term Capability
 
 - Add deeper source notes for VERITIES and scientific-virtues RCR training modules.
 - Add structured records for negative results and cross-disciplinary bridges.
 - Add schema validation beyond presence checks.
+- Implement the executable academic-publication integrity gate in the work
+  packages defined by
+  [`ACADEMIC_PUBLICATION_INTEGRITY_IMPLEMENTATION.md`](ACADEMIC_PUBLICATION_INTEGRITY_IMPLEMENTATION.md).
 - Add branch-comparison templates.
 - Add stale-claim scanner interfaces for repositories and note stores.
 - Add citation-library integration points for CiteGeist.
