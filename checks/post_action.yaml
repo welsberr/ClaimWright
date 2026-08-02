@@ -12,6 +12,10 @@ checks:
     question: What risks, contradictions, stale claims, or private/public issues remain?
   - id: public_artifact_leak_scan
     question: Were all public-facing rendered artifacts, including Markdown, HTML, PDF extracted text, exports, and review appendices, scanned for local paths, secrets, private URLs, internal hostnames, usernames, temporary paths, file:// links, and unpublished note/store references?
+  - id: academic_publication_integrity_review
+    question: Does every public-release text artifact have a documented passing integrity review covering plagiarism and attribution, similarity and text recycling, fabrication and falsification, citation integrity, authorship and AI disclosure, rights and permissions, ethics and conflicts, confidentiality, harmful or unprofessional content, and destination policy?
+  - id: similarity_review_limitations
+    question: Were the similarity method and corpus limitations recorded, and did a human reviewer disposition every material match rather than treating a score as proof of originality?
   - id: tasks_opened
     question: Were follow-up tasks opened for global knowledge-base impact?
   - id: capacity_used

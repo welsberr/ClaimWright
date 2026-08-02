@@ -27,6 +27,8 @@ hard_gates:
     description: Action is destructive and cannot be rolled back to a known-good state.
   - id: contradicted_or_stale_claim
     description: Public artifact relies on a claim marked contradicted or stale pending review.
+  - id: academic_publication_integrity_failure
+    description: Public-release text lacks a passing documented academic-publication integrity review or retains unresolved plagiarism, overlap, fabrication, falsification, attribution, authorship, rights, ethics, disclosure, confidentiality, or venue-policy findings.
 protected_resources:
   - assistant_context_capacity
   - paid_model_budget

@@ -1,0 +1,15 @@
+{
+  "schema_version": "claimwright.publication_integrity_review.v1",
+  "artifact_id": "invalid",
+  "artifact_sha256": "not-a-hash",
+  "release_scope": "invalid fixture",
+  "policy_id": "claimwright.academic_publication_integrity.v1",
+  "policy_sha256": "not-a-hash",
+  "tool_version": "fixture",
+  "destination": "fixture",
+  "checks": [],
+  "similarity_review": {"method":"", "corpus_limitations":[], "material_matches":[]},
+  "decision":"pass",
+  "human_reviewer":"",
+  "reviewed_at":"not-a-timestamp"
+}

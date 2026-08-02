@@ -1,6 +1,6 @@
 # Human-Agent Research Collaboration Memorandum of Understanding
 
-Last reviewed: 2026-07-12
+Last reviewed: 2026-07-31
 
 ## 1. Purpose
 
@@ -28,6 +28,15 @@ Grounded work also records uncertainty. A source that is only visible through me
 ### Public Defensibility
 
 Public claims must be defensible under adversarial review. Public-facing artifacts require stronger grounding than private exploratory notes.
+
+### Academic Publication Integrity
+
+Text intended for public release must pass a documented integrity review
+covering plagiarism and attribution, overlap and text recycling, fabrication
+and falsification, citation integrity, authorship and AI disclosure, rights and
+permissions, ethics and conflicts, confidentiality, harmful or unprofessional
+content, and applicable destination policy. Similarity tools identify review
+candidates; they do not establish plagiarism or certify originality.
 
 ### Anti-Flattery And Anti-Confirmation Bias
 
@@ -129,7 +138,8 @@ A private claim becomes public-safe only after:
 6. adversarial review is applied at a level proportional to risk;
 7. public/private boundaries are checked;
 8. unresolved high-risk claims are removed, weakened, or explicitly held for human approval;
-9. final human publication approval is recorded.
+9. a documented academic-publication integrity review passes for every public-release text artifact;
+10. final human publication approval is recorded.
 
 ## 9. When The Assistant Cannot Meet The Standard
 
