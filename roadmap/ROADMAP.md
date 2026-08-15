@@ -47,6 +47,19 @@ specified in
 cross-repository work-package authority is GroundRecall's
 `docs/institutional-federation-implementation-roadmap.md`.
 
+## Bounded Decision Challenge
+
+The proposed cross-repository meta-review rule is specified in
+[`BOUNDED_DECISION_CHALLENGE.md`](BOUNDED_DECISION_CHALLENGE.md). ClaimWright
+owns the portable trigger, review-level, stop-reason, and artifact policy;
+GroundRecall retains authority over its generic policy-plugin interface; and
+each consuming repository owns which domain actions are substantial.
+
+The implementation is intentionally bounded: one pass per decision version,
+at most three plausible decision-changing failure modes, explicit evidence and
+cost budgets, no recursive challenge of the challenge, and no inference that a
+completed review grants permission or proves correctness.
+
 ## Implemented In This Draft
 
 - IF-00 GroundRecall policy-compatibility fixture covering the institutional
@@ -84,6 +97,8 @@ cross-repository work-package authority is GroundRecall's
 - Add citation-library integration points for CiteGeist.
 - Add a Model Context Protocol (MCP) adapter plan for assistant-facing
   ClaimWright checks.
+- Implement DC0 and DC1 from the bounded decision-challenge roadmap before
+  downstream repositories add incompatible local meta-review formats.
 
 ## Later Capability
 
