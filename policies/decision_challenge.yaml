@@ -1,0 +1,62 @@
+schema_version: claimwright.decision_challenge_policy.v1
+policy_id: claimwright.bounded_decision_challenge.v1
+description: >-
+  One bounded, evidence-directed challenge pass for a substantial decision;
+  review completion is not permission or proof of correctness.
+review_levels:
+  none:
+    purpose: Reversible, local, mechanical, read-only, or already deterministically checked work.
+    max_failure_modes: 0
+    max_checks: 0
+    budget_seconds: 0
+  quick:
+    purpose: Ordinary consequential but reversible decisions.
+    max_failure_modes: 1
+    max_checks: 1
+    budget_seconds: 60
+  standard:
+    purpose: Durable, public, costly, novel, or evidence-sensitive decisions.
+    max_failure_modes: 3
+    max_checks: 2
+    budget_seconds: 300
+  escalated:
+    purpose: Destructive, security/privacy/legal-sensitive, or high-blast-radius decisions.
+    max_failure_modes: 3
+    max_checks: 3
+    budget_seconds: 900
+trigger_codes:
+  - difficult_to_reverse
+  - destructive_action
+  - durable_memory_change
+  - public_release
+  - release_scope_expansion
+  - authority_or_capability_expansion
+  - private_or_restricted_data
+  - high_reputational_impact
+  - high_resource_cost
+  - novel_or_unfamiliar_path
+  - thin_or_contested_evidence
+  - claim_or_mastery_promotion
+  - source_support_or_identity_decision
+  - security_boundary_change
+outcomes:
+  - proceed
+  - revise
+  - defer
+  - escalate
+stop_reasons:
+  - not_triggered
+  - no_plausible_decision_changing_failure_mode
+  - highest_value_check_completed
+  - one_pass_complete
+  - budget_exhausted
+  - evidence_unavailable
+  - human_authority_required
+  - decision_revised
+  - decision_deferred
+invariants:
+  max_failure_modes: 3
+  max_depth: 1
+  one_pass_per_decision_version: true
+  findings_are_not_permission_grants: true
+  private_evidence_is_referenced_not_copied: true

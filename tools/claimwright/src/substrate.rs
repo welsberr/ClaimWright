@@ -8,6 +8,7 @@ const REQUIRED_FILES: &[&str] = &[
     "policies/principles.yaml",
     "policies/claim_states.yaml",
     "policies/enforcement.yaml",
+    "policies/decision_challenge.yaml",
     "policies/academic_publication.yaml",
     "policies/collaboration.yaml",
     "checks/pre_action.yaml",
@@ -28,6 +29,7 @@ const REQUIRED_FILES: &[&str] = &[
     "schemas/claim-record.schema.json",
     "schemas/citation-review.schema.json",
     "schemas/publication-integrity-review.schema.json",
+    "schemas/decision-challenge.schema.json",
     "sources/pennock-scientific-virtues.md",
     "sources/academic-publication-integrity.md",
     "roadmap/ROADMAP.md",
@@ -37,6 +39,14 @@ const REQUIRED_FILES: &[&str] = &[
     "fixtures/groundrecall/institutional_conformance_scenarios.json",
     "fixtures/groundrecall/institutional_write_policy_responses.json",
     "fixtures/groundrecall/custody_policy_responses.json",
+    "fixtures/decision_challenge/valid-none.json",
+    "fixtures/decision_challenge/valid-quick.json",
+    "fixtures/decision_challenge/valid-standard.json",
+    "fixtures/decision_challenge/valid-escalated.json",
+    "fixtures/decision_challenge/invalid-too-many-failure-modes.json",
+    "fixtures/decision_challenge/invalid-parent.json",
+    "fixtures/decision_challenge/invalid-decision-changing.json",
+    "fixtures/decision_challenge/invalid-missing-stop.json",
 ];
 
 const INSTITUTIONAL_POLICY_ACTIONS: &[&str] = &[
@@ -140,6 +150,43 @@ fn check_root(root: &Path) -> Vec<String> {
                 failures.push(format!(
                     "post_action.yaml missing required check: {}",
                     check
+                ));
+            }
+        }
+    }
+
+    let challenge_policy = root.join("policies/decision_challenge.yaml");
+    if let Ok(text) = fs::read_to_string(&challenge_policy) {
+        for marker in [
+            "claimwright.decision_challenge_policy.v1",
+            "claimwright.bounded_decision_challenge.v1",
+            "max_failure_modes: 3",
+            "max_depth: 1",
+            "one_pass_per_decision_version: true",
+            "findings_are_not_permission_grants: true",
+        ] {
+            if !text.contains(marker) {
+                failures.push(format!(
+                    "decision_challenge.yaml missing required marker: {}",
+                    marker
+                ));
+            }
+        }
+    }
+
+    let challenge_schema = root.join("schemas/decision-challenge.schema.json");
+    if let Ok(text) = fs::read_to_string(&challenge_schema) {
+        for marker in [
+            "claimwright.decision_challenge.v1",
+            "\"maxItems\": 3",
+            "\"parent_challenge_id\": { \"type\": \"null\" }",
+            "\"decision_changing\": { \"const\": true }",
+            "\"review_level\": { \"enum\": [\"none\", \"quick\", \"standard\", \"escalated\"] }",
+        ] {
+            if !text.contains(marker) {
+                failures.push(format!(
+                    "decision-challenge.schema.json missing required marker: {}",
+                    marker
                 ));
             }
         }
