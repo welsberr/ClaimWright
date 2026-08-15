@@ -17,7 +17,9 @@
       "decision_changing": false,
       "discriminating_evidence": "Compare formatter output.",
       "cheapest_check": "Run the formatter.",
-      "check_status": "completed"
+      "check_status": "completed",
+      "result_ref": "artifact:formatter-001",
+      "result_summary": "Formatting changed only internal whitespace."
     }
   ],
   "outcome": "proceed",

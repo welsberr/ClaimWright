@@ -47,6 +47,22 @@ const REQUIRED_FILES: &[&str] = &[
     "fixtures/decision_challenge/invalid-parent.json",
     "fixtures/decision_challenge/invalid-decision-changing.json",
     "fixtures/decision_challenge/invalid-missing-stop.json",
+    "fixtures/decision_challenge/invalid-fabricated-evidence.json",
+];
+
+const DECISION_CHALLENGE_VALID_FIXTURES: &[&str] = &[
+    "fixtures/decision_challenge/valid-none.json",
+    "fixtures/decision_challenge/valid-quick.json",
+    "fixtures/decision_challenge/valid-standard.json",
+    "fixtures/decision_challenge/valid-escalated.json",
+];
+
+const DECISION_CHALLENGE_INVALID_FIXTURES: &[&str] = &[
+    "fixtures/decision_challenge/invalid-too-many-failure-modes.json",
+    "fixtures/decision_challenge/invalid-parent.json",
+    "fixtures/decision_challenge/invalid-decision-changing.json",
+    "fixtures/decision_challenge/invalid-missing-stop.json",
+    "fixtures/decision_challenge/invalid-fabricated-evidence.json",
 ];
 
 const INSTITUTIONAL_POLICY_ACTIONS: &[&str] = &[
@@ -188,6 +204,23 @@ fn check_root(root: &Path) -> Vec<String> {
                     "decision-challenge.schema.json missing required marker: {}",
                     marker
                 ));
+            }
+        }
+    }
+
+    for rel in DECISION_CHALLENGE_VALID_FIXTURES {
+        let path = root.join(rel);
+        if let Ok(text) = fs::read_to_string(&path) {
+            for error in validate_decision_challenge(&text) {
+                failures.push(format!("{}: {}", rel, error));
+            }
+        }
+    }
+    for rel in DECISION_CHALLENGE_INVALID_FIXTURES {
+        let path = root.join(rel);
+        if let Ok(text) = fs::read_to_string(&path) {
+            if validate_decision_challenge(&text).is_empty() {
+                failures.push(format!("{}: invalid fixture unexpectedly passed", rel));
             }
         }
     }
@@ -366,6 +399,224 @@ fn check_root(root: &Path) -> Vec<String> {
     failures
 }
 
+fn validate_decision_challenge(input: &str) -> Vec<String> {
+    use serde_json::Value;
+
+    let mut errors = Vec::new();
+    let value: Value = match serde_json::from_str(input) {
+        Ok(value) => value,
+        Err(error) => return vec![format!("invalid JSON: {error}")],
+    };
+    let Some(object) = value.as_object() else {
+        return vec!["challenge must be a JSON object".to_string()];
+    };
+
+    for field in [
+        "schema_version",
+        "challenge_id",
+        "decision_id",
+        "subject_id",
+        "action",
+        "review_level",
+        "trigger_codes",
+        "decision_summary",
+        "failure_modes",
+        "outcome",
+        "residual_uncertainty",
+        "stop_reason",
+        "review_state",
+        "authority",
+    ] {
+        if !object.contains_key(field) {
+            errors.push(format!("missing required field: {field}"));
+        }
+    }
+    if object.get("schema_version").and_then(Value::as_str)
+        != Some("claimwright.decision_challenge.v1")
+    {
+        errors.push("unsupported schema_version".to_string());
+    }
+    for field in [
+        "challenge_id",
+        "decision_id",
+        "subject_id",
+        "action",
+        "decision_summary",
+        "authority",
+    ] {
+        if object
+            .get(field)
+            .and_then(Value::as_str)
+            .is_none_or(|value| value.trim().is_empty())
+        {
+            errors.push(format!("{field} must be a non-empty string"));
+        }
+    }
+    if object
+        .get("decision_version")
+        .and_then(Value::as_u64)
+        .is_none_or(|value| value == 0)
+    {
+        errors.push("decision_version must be a positive integer".to_string());
+    }
+
+    let review_level = object.get("review_level").and_then(Value::as_str);
+    if !matches!(
+        review_level,
+        Some("none" | "quick" | "standard" | "escalated")
+    ) {
+        errors.push("review_level is not in the bounded vocabulary".to_string());
+    }
+    let outcome = object.get("outcome").and_then(Value::as_str);
+    if !matches!(outcome, Some("proceed" | "revise" | "defer" | "escalate")) {
+        errors.push("outcome is not in the bounded vocabulary".to_string());
+    }
+    let stop_reason = object.get("stop_reason").and_then(Value::as_str);
+    if !matches!(
+        stop_reason,
+        Some(
+            "not_triggered"
+                | "no_plausible_decision_changing_failure_mode"
+                | "highest_value_check_completed"
+                | "one_pass_complete"
+                | "budget_exhausted"
+                | "evidence_unavailable"
+                | "human_authority_required"
+                | "decision_revised"
+                | "decision_deferred"
+        )
+    ) {
+        errors.push("stop_reason is not in the bounded vocabulary".to_string());
+    }
+    if !matches!(
+        object.get("review_state").and_then(Value::as_str),
+        Some("draft" | "reviewed" | "escalated" | "closed")
+    ) {
+        errors.push("review_state is not in the bounded vocabulary".to_string());
+    }
+
+    let known_triggers = [
+        "difficult_to_reverse",
+        "destructive_action",
+        "durable_memory_change",
+        "public_release",
+        "release_scope_expansion",
+        "authority_or_capability_expansion",
+        "private_or_restricted_data",
+        "high_reputational_impact",
+        "high_resource_cost",
+        "novel_or_unfamiliar_path",
+        "thin_or_contested_evidence",
+        "claim_or_mastery_promotion",
+        "source_support_or_identity_decision",
+        "security_boundary_change",
+    ];
+    let triggers = object.get("trigger_codes").and_then(Value::as_array);
+    let mut trigger_ids = HashSet::new();
+    if let Some(triggers) = triggers {
+        if triggers.len() > 8 {
+            errors.push("trigger_codes may contain at most eight entries".to_string());
+        }
+        for trigger in triggers {
+            let Some(trigger) = trigger.as_str() else {
+                errors.push("trigger_codes must contain strings".to_string());
+                continue;
+            };
+            if !known_triggers.contains(&trigger) {
+                errors.push(format!("unknown trigger code: {trigger}"));
+            }
+            if !trigger_ids.insert(trigger) {
+                errors.push(format!("duplicate trigger code: {trigger}"));
+            }
+        }
+    } else {
+        errors.push("trigger_codes must be an array".to_string());
+    }
+
+    let failure_modes = object.get("failure_modes").and_then(Value::as_array);
+    let failure_count = failure_modes.map_or(0, Vec::len);
+    if failure_count > 3 {
+        errors.push("failure_modes may contain at most three entries".to_string());
+    }
+    let mut failure_ids = HashSet::new();
+    if let Some(failure_modes) = failure_modes {
+        for (index, failure) in failure_modes.iter().enumerate() {
+            let Some(failure) = failure.as_object() else {
+                errors.push(format!("failure mode {index} must be an object"));
+                continue;
+            };
+            for field in [
+                "failure_mode_id",
+                "hypothesis",
+                "plausibility_basis",
+                "material_consequence",
+                "discriminating_evidence",
+                "cheapest_check",
+                "check_status",
+            ] {
+                if failure
+                    .get(field)
+                    .and_then(Value::as_str)
+                    .is_none_or(|value| value.trim().is_empty())
+                {
+                    errors.push(format!("failure mode {index} missing non-empty {field}"));
+                }
+            }
+            if failure.get("decision_changing") != Some(&Value::Bool(true)) {
+                errors.push(format!("failure mode {index} must be decision-changing"));
+            }
+            let status = failure.get("check_status").and_then(Value::as_str);
+            if !matches!(
+                status,
+                Some("not_run" | "completed" | "inconclusive" | "unavailable")
+            ) {
+                errors.push(format!("failure mode {index} has invalid check_status"));
+            }
+            if matches!(status, Some("completed" | "inconclusive")) {
+                for field in ["result_ref", "result_summary"] {
+                    if failure
+                        .get(field)
+                        .and_then(Value::as_str)
+                        .is_none_or(|value| value.trim().is_empty())
+                    {
+                        errors.push(format!(
+                            "failure mode {index} missing {field} for {status:?} check"
+                        ));
+                    }
+                }
+            }
+            if let Some(id) = failure.get("failure_mode_id").and_then(Value::as_str) {
+                if !failure_ids.insert(id) {
+                    errors.push(format!("duplicate failure_mode_id: {id}"));
+                }
+            }
+        }
+    } else {
+        errors.push("failure_modes must be an array".to_string());
+    }
+
+    if object
+        .get("parent_challenge_id")
+        .is_some_and(|value| !value.is_null())
+    {
+        errors
+            .push("parent_challenge_id must be null; nested challenges are forbidden".to_string());
+    }
+    match review_level {
+        Some("none") if !trigger_ids.is_empty() || failure_count != 0 => {
+            errors.push("none review level cannot carry triggers or failure modes".to_string())
+        }
+        Some("quick") if failure_count > 1 => {
+            errors.push("quick review level permits at most one failure mode".to_string())
+        }
+        _ => {}
+    }
+    if review_level == Some("none") && stop_reason != Some("not_triggered") {
+        errors.push("none review level must stop with not_triggered".to_string());
+    }
+    errors
+}
+
 fn is_empty(path: &Path) -> bool {
     match fs::metadata(path) {
         Ok(metadata) => metadata.len() == 0,
@@ -375,7 +626,7 @@ fn is_empty(path: &Path) -> bool {
 
 #[cfg(test)]
 mod tests {
-    use super::{run, Outcome};
+    use super::{run, validate_decision_challenge, Outcome};
     use std::fs;
     use std::path::PathBuf;
     use std::time::{SystemTime, UNIX_EPOCH};
@@ -431,5 +682,33 @@ mod tests {
             run(&args),
             Outcome::UsageError("usage: claimwright check <repo-root>".to_string())
         );
+    }
+
+    #[test]
+    fn decision_challenge_fixtures_enforce_bounds_and_evidence_receipts() {
+        let root = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+            .parent()
+            .and_then(|path| path.parent())
+            .expect("repository root")
+            .to_path_buf();
+        let valid =
+            fs::read_to_string(root.join("fixtures/decision_challenge/valid-standard.json"))
+                .expect("valid challenge fixture");
+        assert!(validate_decision_challenge(&valid).is_empty());
+
+        let recursive =
+            fs::read_to_string(root.join("fixtures/decision_challenge/invalid-parent.json"))
+                .expect("recursive challenge fixture");
+        assert!(validate_decision_challenge(&recursive)
+            .iter()
+            .any(|error| error.contains("nested challenges")));
+
+        let fabricated = fs::read_to_string(
+            root.join("fixtures/decision_challenge/invalid-fabricated-evidence.json"),
+        )
+        .expect("fabricated evidence fixture");
+        assert!(validate_decision_challenge(&fabricated)
+            .iter()
+            .any(|error| error.contains("result_ref")));
     }
 }
