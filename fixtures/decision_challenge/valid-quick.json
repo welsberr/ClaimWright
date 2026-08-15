@@ -1,0 +1,31 @@
+{
+  "schema_version": "claimwright.decision_challenge.v1",
+  "challenge_id": "dc_quick_001",
+  "decision_id": "local_export_name",
+  "decision_version": 2,
+  "subject_id": "agent:test",
+  "action": "rename_local_export",
+  "review_level": "quick",
+  "trigger_codes": ["novel_or_unfamiliar_path"],
+  "decision_summary": "Rename a local export before sharing it with a collaborator.",
+  "key_assumptions": ["The rename does not change file contents."],
+  "failure_modes": [
+    {
+      "failure_mode_id": "fm_wrong_target",
+      "hypothesis": "The selected path may refer to a similarly named file.",
+      "plausibility_basis": "The workspace contains two recent exports with similar names.",
+      "material_consequence": "The wrong artifact could be shared.",
+      "decision_changing": true,
+      "discriminating_evidence": "Compare the selected file hash with the intended export manifest.",
+      "cheapest_check": "Run the local manifest lookup.",
+      "check_status": "completed",
+      "result_ref": "artifact:manifest-check-001",
+      "result_summary": "Hash matched the intended export."
+    }
+  ],
+  "outcome": "proceed",
+  "residual_uncertainty": ["The collaborator may have an older copy."],
+  "stop_reason": "highest_value_check_completed",
+  "review_state": "reviewed",
+  "authority": "Policy finding only; sharing authority remains with the caller."
+}

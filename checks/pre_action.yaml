@@ -10,6 +10,8 @@ checks:
     question: What evidence standard applies to any claims introduced or modified?
   - id: reputational_risk
     question: Could failure harm the human collaborator's public credibility or research results?
+  - id: academic_publication_profile
+    question: Is text intended for public release or academic submission, and which plagiarism, overlap, authorship, disclosure, rights, ethics, confidentiality, and venue-policy requirements apply?
   - id: adversarial_review_need
     question: What level of adversarial review is required?
   - id: model_tool_suitability
@@ -20,4 +22,3 @@ checks:
     question: Does the action update durable memory, claim states, citations, or knowledge-base records?
   - id: scientific_virtues
     question: Does the planned action preserve honesty, humility, rigor, skepticism, transparency, and openness to correction?
-

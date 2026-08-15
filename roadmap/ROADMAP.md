@@ -47,6 +47,19 @@ specified in
 cross-repository work-package authority is GroundRecall's
 `docs/institutional-federation-implementation-roadmap.md`.
 
+## Bounded Decision Challenge
+
+The proposed cross-repository meta-review rule is specified in
+[`BOUNDED_DECISION_CHALLENGE.md`](BOUNDED_DECISION_CHALLENGE.md). ClaimWright
+owns the portable trigger, review-level, stop-reason, and artifact policy;
+GroundRecall retains authority over its generic policy-plugin interface; and
+each consuming repository owns which domain actions are substantial.
+
+The implementation is intentionally bounded: one pass per decision version,
+at most three plausible decision-changing failure modes, explicit evidence and
+cost budgets, no recursive challenge of the challenge, and no inference that a
+completed review grants permission or proves correctness.
+
 ## Implemented In This Draft
 
 - IF-00 GroundRecall policy-compatibility fixture covering the institutional
@@ -67,17 +80,30 @@ cross-repository work-package authority is GroundRecall's
 - Pennock scientific virtues source note.
 - Minimal Rust policy-substrate checker.
 - Public-safe artifact workflow example.
+- Academic-publication integrity policy, review-record schema, and
+  implementation plan. See
+  [`ACADEMIC_PUBLICATION_INTEGRITY_IMPLEMENTATION.md`](ACADEMIC_PUBLICATION_INTEGRITY_IMPLEMENTATION.md).
+- Bounded decision-challenge schema, policy vocabulary, golden fixtures, and
+  semantic checker (DC0/DC1). See
+  [`BOUNDED_DECISION_CHALLENGE.md`](BOUNDED_DECISION_CHALLENGE.md).
 
 ## Near-Term Capability
 
 - Add deeper source notes for VERITIES and scientific-virtues RCR training modules.
 - Add structured records for negative results and cross-disciplinary bridges.
 - Add schema validation beyond presence checks.
+- Implement the executable academic-publication integrity gate in the work
+  packages defined by
+  [`ACADEMIC_PUBLICATION_INTEGRITY_IMPLEMENTATION.md`](ACADEMIC_PUBLICATION_INTEGRITY_IMPLEMENTATION.md).
 - Add branch-comparison templates.
 - Add stale-claim scanner interfaces for repositories and note stores.
 - Add citation-library integration points for CiteGeist.
 - Add a Model Context Protocol (MCP) adapter plan for assistant-facing
   ClaimWright checks.
+- Continue DC5 cross-repository conformance and maintain versioned adapters;
+  DC0/DC1 are implemented in ClaimWright and DC2–DC4 have initial adapters in
+  GroundRecall, CiteGeist, Epistemap, Didactopus, SciSiteForge, GenieHive,
+  doclift, and ThreeGate.
 
 ## Later Capability
 

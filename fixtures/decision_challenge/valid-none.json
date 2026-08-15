@@ -1,0 +1,17 @@
+{
+  "schema_version": "claimwright.decision_challenge.v1",
+  "challenge_id": "dc_none_001",
+  "decision_id": "local_format_check",
+  "decision_version": 1,
+  "subject_id": "agent:test",
+  "action": "format_local_note",
+  "review_level": "none",
+  "trigger_codes": [],
+  "decision_summary": "Format a local working note without changing durable state.",
+  "failure_modes": [],
+  "outcome": "proceed",
+  "residual_uncertainty": [],
+  "stop_reason": "not_triggered",
+  "review_state": "closed",
+  "authority": "Policy finding only; the caller retains action authority."
+}

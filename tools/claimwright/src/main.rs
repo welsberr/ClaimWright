@@ -1,284 +1,118 @@
-use std::collections::HashSet;
+mod publication;
+mod substrate;
+
 use std::env;
-use std::fs;
-use std::path::{Path, PathBuf};
 use std::process;
-
-const REQUIRED_FILES: &[&str] = &[
-    "MOU.md",
-    "LICENSE",
-    "policies/principles.yaml",
-    "policies/claim_states.yaml",
-    "policies/enforcement.yaml",
-    "policies/collaboration.yaml",
-    "checks/pre_action.yaml",
-    "checks/post_action.yaml",
-    "checks/institutional_contribution.yaml",
-    "roles/claim-auditor.md",
-    "roles/adversarial-reviewer.md",
-    "roles/synthesis-mapper.md",
-    "roles/knowledge-base-maintainer.md",
-    "roles/citation-reviewer.md",
-    "roles/publication-gatekeeper.md",
-    "roles/prior-work-reviewer.md",
-    "roles/group-contributor.md",
-    "roles/group-reviewer.md",
-    "roles/scope-steward.md",
-    "roles/records-custodian.md",
-    "roles/tenancy-handoff-reviewer.md",
-    "schemas/claim-record.schema.json",
-    "schemas/citation-review.schema.json",
-    "sources/pennock-scientific-virtues.md",
-    "roadmap/ROADMAP.md",
-    "fixtures/groundrecall/institutional_policy_cases.json",
-    "fixtures/groundrecall/mcp_policy_responses.json",
-    "fixtures/groundrecall/institutional_conformance_scenarios.json",
-    "fixtures/groundrecall/institutional_write_policy_responses.json",
-    "fixtures/groundrecall/custody_policy_responses.json",
-];
-
-const INSTITUTIONAL_POLICY_ACTIONS: &[&str] = &[
-    "discover_federation_catalog",
-    "read_federation_catalog_entry",
-    "propose_group_contribution",
-    "review_group_contribution",
-    "accept_group_contribution",
-    "publish_federation_catalog",
-    "import_federation_catalog",
-    "manage_federation_subscription",
-    "export_incremental_changes",
-    "import_incremental_changes",
-    "record_federation_feedback",
-    "transfer_knowledge_custody",
-    "retire_federation_instance",
-    "generate_scope_orientation",
-    "generate_stewardship_view",
-    "generate_change_impact_report",
-    "publish_knowledge_release_pack",
-    "withdraw_knowledge_release",
-];
-
-const REQUIRED_MOU_TERMS: &[&str] = &[
-    "Grounded work",
-    "Public Defensibility",
-    "Anti-Flattery",
-    "Durable Correction",
-    "Negative Results",
-    "Capability And Cost Matching",
-];
 
 fn main() {
     let args: Vec<String> = env::args().collect();
-    if args.len() != 3 || args[1] != "check" {
-        eprintln!("usage: claimwright check <repo-root>");
-        process::exit(2);
-    }
-
-    let root = PathBuf::from(&args[2]);
-    let mut failures = Vec::new();
-
-    for rel in REQUIRED_FILES {
-        let path = root.join(rel);
-        if !path.is_file() {
-            failures.push(format!("missing required file: {}", rel));
-        } else if is_empty(&path) {
-            failures.push(format!("empty required file: {}", rel));
+    if args.get(1).map(String::as_str) == Some("publication")
+        && args.get(2).map(String::as_str) == Some("init-review")
+    {
+        match publication::cli::init_review(&args) {
+            Ok(message) => println!("{message}"),
+            Err(message) => {
+                eprintln!("error: {message}");
+                process::exit(if message.starts_with("publication.similarity.") {
+                    1
+                } else {
+                    2
+                });
+            }
         }
+        return;
     }
-
-    let mou_path = root.join("MOU.md");
-    if let Ok(mou) = fs::read_to_string(&mou_path) {
-        for term in REQUIRED_MOU_TERMS {
-            if !mou.contains(term) {
-                failures.push(format!("MOU.md missing required term: {}", term));
+    if args.get(1).map(String::as_str) == Some("publication")
+        && args.get(2).map(String::as_str) == Some("check")
+    {
+        match publication::cli::check_review(&args) {
+            Ok((text, code)) => {
+                print!("{text}");
+                process::exit(code);
+            }
+            Err(message) => {
+                eprintln!("error: {message}");
+                process::exit(if message.starts_with("publication.similarity.") {
+                    1
+                } else {
+                    2
+                });
             }
         }
     }
-
-    let enforcement = root.join("policies/enforcement.yaml");
-    if let Ok(text) = fs::read_to_string(&enforcement) {
-        for gate in [
-            "unresolved_high_risk_public_claim",
-            "fabricated_or_unverified_citation",
-            "private_material_publication",
-            "local_path_publication",
-            "destructive_irreversible_action",
-            "contradicted_or_stale_claim",
-        ] {
-            if !text.contains(gate) {
-                failures.push(format!("enforcement.yaml missing hard gate: {}", gate));
-            }
-        }
-    }
-
-    let post_action = root.join("checks/post_action.yaml");
-    if let Ok(text) = fs::read_to_string(&post_action) {
-        for check in ["public_artifact_leak_scan"] {
-            if !text.contains(check) {
-                failures.push(format!("post_action.yaml missing required check: {}", check));
-            }
-        }
-    }
-
-    let collaboration = root.join("policies/collaboration.yaml");
-    if let Ok(text) = fs::read_to_string(&collaboration) {
-        for marker in [
-            "claimwright.collaboration_policy.v1",
-            "destination_scope_required",
-            "contribution_review_separation",
-            "negative_result_preservation",
-            "stewardship_required",
-            "rationale_preservation",
-            "prior_work_review",
-            "catalog_least_disclosure",
-            "subscription_purpose_and_routing",
-            "multi_party_review_feedback",
-            "custody_tenancy_retirement",
-            "institutional_view_privacy_fairness",
-            "license_aware_release_withdrawal",
-        ] {
-            if !text.contains(marker) {
-                failures.push(format!(
-                    "collaboration.yaml missing required marker: {}",
-                    marker
-                ));
-            }
-        }
-    }
-
-    let institutional_fixture = root.join("fixtures/groundrecall/institutional_policy_cases.json");
-    if let Ok(text) = fs::read_to_string(&institutional_fixture) {
-        if !text.contains("groundrecall.institutional_policy_fixtures.v1") {
-            failures.push("institutional policy fixture has an unknown schema version".to_string());
-        }
-        for action in INSTITUTIONAL_POLICY_ACTIONS {
-            if !text.contains(action) {
-                failures.push(format!(
-                    "institutional policy fixture missing action: {}",
-                    action
-                ));
-            }
-        }
-        let mut case_ids = HashSet::new();
-        for line in text.lines().filter(|line| line.contains("\"case_id\"")) {
-            if let Some(value) = line
-                .split("\"case_id\": \"")
-                .nth(1)
-                .and_then(|rest| rest.split('"').next())
-            {
-                if !case_ids.insert(value.to_string()) {
-                    failures.push(format!(
-                        "institutional policy fixture has duplicate case ID: {}",
-                        value
-                    ));
+    if args.get(1).map(String::as_str) == Some("publication")
+        && args.get(2).map(String::as_str) == Some("similarity")
+        && args.get(3).map(String::as_str) == Some("generate")
+    {
+        let mut artifact = None;
+        let mut corpus = None;
+        let mut output = None;
+        let mut ngram = 8usize;
+        let mut threshold = 0.7f64;
+        let mut i = 4;
+        while i < args.len() {
+            match args[i].as_str() {
+                "--artifact" => {
+                    i += 1;
+                    artifact = args.get(i)
                 }
-            } else {
-                failures.push("institutional policy fixture has malformed case ID".to_string());
+                "--comparison-corpus" => {
+                    i += 1;
+                    corpus = args.get(i)
+                }
+                "--output" => {
+                    i += 1;
+                    output = args.get(i)
+                }
+                "--ngram-size" => {
+                    i += 1;
+                    ngram = args.get(i).and_then(|v| v.parse().ok()).unwrap_or(8)
+                }
+                "--jaccard-threshold" => {
+                    i += 1;
+                    threshold = args.get(i).and_then(|v| v.parse().ok()).unwrap_or(0.7)
+                }
+                x => {
+                    eprintln!("error: unknown option: {x}");
+                    process::exit(2)
+                }
+            }
+            i += 1;
+        }
+        match (artifact, corpus, output) {
+            (Some(a), Some(c), Some(o)) => match publication::similarity::generate(
+                std::path::Path::new(a),
+                std::path::Path::new(c),
+                std::path::Path::new(o),
+                ngram,
+                threshold,
+            ) {
+                Ok(()) => println!("Generated similarity candidate report: {o}"),
+                Err(e) => {
+                    eprintln!("error: {e}");
+                    process::exit(3)
+                }
+            },
+            _ => {
+                eprintln!("error: --artifact, --comparison-corpus, and --output are required");
+                process::exit(2)
             }
         }
-        let allowed_decisions = ["allow", "require_review", "soft_gate", "hard_gate", "deny"];
-        for line in text
-            .lines()
-            .filter(|line| line.contains("\"expected_decision\""))
-        {
-            let value = line
-                .split("\"expected_decision\": \"")
-                .nth(1)
-                .and_then(|rest| rest.split('"').next());
-            if !value.is_some_and(|item| allowed_decisions.contains(&item)) {
-                failures.push(
-                    "institutional policy fixture has an invalid expected decision".to_string(),
-                );
+        return;
+    }
+    match substrate::run(&args) {
+        substrate::Outcome::Success => {
+            println!("ClaimWright check passed: policy substrate is present.");
+        }
+        substrate::Outcome::UsageError(message) => {
+            eprintln!("{}", message);
+            process::exit(2);
+        }
+        substrate::Outcome::Failure(failures) => {
+            for failure in failures {
+                eprintln!("error: {}", failure);
             }
+            process::exit(1);
         }
-    }
-
-    let mcp_fixture = root.join("fixtures/groundrecall/mcp_policy_responses.json");
-    if let Ok(text) = fs::read_to_string(&mcp_fixture) {
-        for marker in [
-            "claimwright.groundrecall_mcp_policy_responses.v1",
-            "policy_finding_not_permission_grant",
-            "draft_only_no_canonical_write",
-            "explicit_stewardship_no_activity_ranking",
-            "publication_gatekeeper_required",
-        ] {
-            if !text.contains(marker) {
-                failures.push(format!("MCP policy fixture missing marker: {}", marker));
-            }
-        }
-    }
-
-    let conformance_fixture =
-        root.join("fixtures/groundrecall/institutional_conformance_scenarios.json");
-    if let Ok(text) = fs::read_to_string(&conformance_fixture) {
-        for marker in [
-            "claimwright.groundrecall_institutional_conformance_scenarios.v1",
-            "groundrecall.institutional_conformance.v1",
-            "group_knowledge_propagation",
-            "silo_reduction_and_discovery",
-            "duplicate_effort_avoidance",
-            "knowledge_survival_after_tenancy_or_host_change",
-            "controlled_reuse_and_public_release",
-            "policy_governed_assistant_surface",
-            "not production certification or permission grants",
-        ] {
-            if !text.contains(marker) {
-                failures.push(format!(
-                    "institutional conformance fixture missing marker: {}",
-                    marker
-                ));
-            }
-        }
-    }
-
-    let write_fixture =
-        root.join("fixtures/groundrecall/institutional_write_policy_responses.json");
-    if let Ok(text) = fs::read_to_string(&write_fixture) {
-        for marker in [
-            "claimwright.groundrecall_institutional_write_policy_responses.v1",
-            "python_api.institutional.save_records",
-            "python_api.institutional.transition_contribution",
-            "durable_institutional_write_gate",
-            "contribution_transition_write_gate",
-            "trusted_primitive_not_public_authority_surface",
-        ] {
-            if !text.contains(marker) {
-                failures.push(format!(
-                    "institutional write policy fixture missing marker: {}",
-                    marker
-                ));
-            }
-        }
-    }
-
-    let custody_fixture = root.join("fixtures/groundrecall/custody_policy_responses.json");
-    if let Ok(text) = fs::read_to_string(&custody_fixture) {
-        for marker in [
-            "claimwright.groundrecall_custody_policy_responses.v1",
-            "python_api.custody.record_event",
-            "custody_event_policy_preflight",
-            "custody_event_release_broadening_guard",
-            "role_authority_follow_up",
-        ] {
-            if !text.contains(marker) {
-                failures.push(format!("custody policy fixture missing marker: {}", marker));
-            }
-        }
-    }
-
-    if failures.is_empty() {
-        println!("ClaimWright check passed: policy substrate is present.");
-    } else {
-        for failure in &failures {
-            eprintln!("error: {}", failure);
-        }
-        process::exit(1);
-    }
-}
-
-fn is_empty(path: &Path) -> bool {
-    match fs::metadata(path) {
-        Ok(metadata) => metadata.len() == 0,
-        Err(_) => true,
     }
 }
