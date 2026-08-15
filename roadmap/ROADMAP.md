@@ -83,6 +83,9 @@ completed review grants permission or proves correctness.
 - Academic-publication integrity policy, review-record schema, and
   implementation plan. See
   [`ACADEMIC_PUBLICATION_INTEGRITY_IMPLEMENTATION.md`](ACADEMIC_PUBLICATION_INTEGRITY_IMPLEMENTATION.md).
+- Bounded decision-challenge schema, policy vocabulary, golden fixtures, and
+  semantic checker (DC0/DC1). See
+  [`BOUNDED_DECISION_CHALLENGE.md`](BOUNDED_DECISION_CHALLENGE.md).
 
 ## Near-Term Capability
 
@@ -97,8 +100,10 @@ completed review grants permission or proves correctness.
 - Add citation-library integration points for CiteGeist.
 - Add a Model Context Protocol (MCP) adapter plan for assistant-facing
   ClaimWright checks.
-- Implement DC0 and DC1 from the bounded decision-challenge roadmap before
-  downstream repositories add incompatible local meta-review formats.
+- Continue DC5 cross-repository conformance and maintain versioned adapters;
+  DC0/DC1 are implemented in ClaimWright and DC2–DC4 have initial adapters in
+  GroundRecall, CiteGeist, Epistemap, Didactopus, SciSiteForge, GenieHive,
+  doclift, and ThreeGate.
 
 ## Later Capability
 

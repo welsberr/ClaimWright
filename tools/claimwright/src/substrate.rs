@@ -48,6 +48,7 @@ const REQUIRED_FILES: &[&str] = &[
     "fixtures/decision_challenge/invalid-decision-changing.json",
     "fixtures/decision_challenge/invalid-missing-stop.json",
     "fixtures/decision_challenge/invalid-fabricated-evidence.json",
+    "fixtures/decision_challenge/conformance.json",
 ];
 
 const DECISION_CHALLENGE_VALID_FIXTURES: &[&str] = &[
@@ -203,6 +204,39 @@ fn check_root(root: &Path) -> Vec<String> {
                 failures.push(format!(
                     "decision-challenge.schema.json missing required marker: {}",
                     marker
+                ));
+            }
+        }
+    }
+
+    let conformance_fixture = root.join("fixtures/decision_challenge/conformance.json");
+    if let Ok(text) = fs::read_to_string(&conformance_fixture) {
+        if !text.contains("claimwright.decision_challenge_conformance.v1")
+            || !text.contains("not_permission_or_correctness")
+        {
+            failures.push(
+                "decision challenge conformance fixture is missing its boundary markers"
+                    .to_string(),
+            );
+        }
+        let mut case_ids = HashSet::new();
+        for line in text.lines().filter(|line| line.contains("\"case_id\"")) {
+            if let Some(value) = line
+                .split("\"case_id\": \"")
+                .nth(1)
+                .and_then(|rest| rest.split('"').next())
+            {
+                if !case_ids.insert(value.to_string()) {
+                    failures.push(format!(
+                        "decision challenge conformance has duplicate case ID: {value}"
+                    ));
+                }
+            }
+        }
+        for level in ["none", "quick", "standard", "escalated", "rejected"] {
+            if !text.contains(&format!("\"review_level\": \"{level}\"")) {
+                failures.push(format!(
+                    "decision challenge conformance missing review level: {level}"
                 ));
             }
         }
