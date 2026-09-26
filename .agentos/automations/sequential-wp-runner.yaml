@@ -1,0 +1,18 @@
+version: 0.1
+automation_id: claimwright.agentos.sequential_wp_runner.v1
+trigger: explicit_human_wp_assignment
+inputs:
+  - current_worktree
+  - assigned_wp
+  - roadmap/ACADEMIC_PUBLICATION_INTEGRITY_IMPLEMENTATION.md
+outputs:
+  - scoped_source_changes
+  - private_run_log
+  - acceptance_report
+side_effects:
+  - local_repository_edits_within_assigned_scope
+  - local_build_and_test_artifacts
+approval: human_acceptance_required_after_each_wp
+failure_behavior: stop_and_report; do_not_advance_to_the_next_wp
+rollback: restore_only_explicitly_identified_agent_changes_after_human_approval
+network: disabled_by_default

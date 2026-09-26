@@ -1,0 +1,70 @@
+version: 0.1
+policy_id: claimwright.academic_publication_integrity.v1
+scope:
+  applies_to:
+    - text_intended_for_public_release
+    - academic_manuscripts
+    - preprints
+    - conference_submissions
+    - scholarly_reports
+    - public_review_appendices
+  decision: hard_gate
+rule: Public-release text must have a documented academic-publication integrity review and must not be released with unresolved blocking findings.
+review_requirements:
+  - id: plagiarism_and_attribution
+    check: Review prose, ideas, methods, results, data, tables, figures, and other expressive material for unattributed appropriation.
+    blocking_when: Suspected unattributed use remains unresolved or required attribution is absent.
+  - id: similarity_and_text_recycling
+    check: Review similarity candidates against third-party and author-owned prior work, including translations and closely related drafts.
+    blocking_when: Material overlap, redundant publication, or self-reuse is undisclosed, misleading, inadequately cited, or incompatible with the destination policy.
+  - id: fabrication_falsification_and_manipulation
+    check: Check for invented, altered, selectively omitted, or misleadingly presented claims, data, results, methods, quotations, images, and figures.
+    blocking_when: The artifact does not accurately represent the inspected research record.
+  - id: citation_and_source_integrity
+    check: Verify citations, quotations, source access depth, claim-source fit, retractions or corrections when relevant, and faithful representation of source conclusions.
+    blocking_when: A citation is fabricated, unverifiable, materially misleading, or does not support the claim made.
+  - id: authorship_contribution_and_ai_disclosure
+    check: Confirm accountable human authorship, fair contribution credit, acknowledgments, and required disclosure of AI-assisted work and its purpose.
+    blocking_when: Authorship is misleading, a responsible human reviewer is absent, or required contribution or AI-use disclosure is missing.
+  - id: copyright_license_and_permissions
+    check: Confirm rights, licenses, quotation limits, figure and table permissions, and required attribution.
+    blocking_when: Publication would exceed authorized reuse or omit required license or attribution terms.
+  - id: ethics_consent_conflicts_and_funding
+    check: Confirm applicable human or animal research approval, consent, privacy protection, trial or study registration, conflicts of interest, and funding disclosures.
+    blocking_when: A required approval, consent, registration, or disclosure is absent or materially inconsistent.
+  - id: confidentiality_and_private_material
+    check: Confirm that confidential manuscripts, peer-review material, personal data, secrets, and private research records were not improperly used or exposed.
+    blocking_when: Confidential or private material lacks explicit authority for the intended release.
+  - id: harmful_or_unprofessional_content
+    check: Review for unsupported allegations, defamation risk, discriminatory or harassing content, privacy invasion, deceptive rhetoric, and material bias presented as fact.
+    blocking_when: Serious harm, unfairness, or misleading characterization remains unresolved.
+  - id: venue_and_release_policy
+    check: Review prior-publication, simultaneous-submission, preprint, embargo, data-sharing, disclosure, formatting, and other applicable destination requirements.
+    blocking_when: The intended release conflicts with a binding institutional, funder, publisher, repository, or venue policy.
+similarity_review:
+  required: true
+  rule: Automated similarity systems identify candidates for review; they do not determine plagiarism or certify originality.
+  evidence_required:
+    - tool_or_corpus_used
+    - corpus_and_access_limitations
+    - candidate_matches
+    - quotation_reference_and_boilerplate_handling
+    - human_classification_of_each_material_match
+    - corrections_or_disclosures_made
+pass_conditions:
+  - every applicable review requirement is pass or documented_not_applicable
+  - every material similarity candidate has a recorded human disposition
+  - no blocking finding remains unresolved
+  - an accountable human reviewer approves the integrity review
+  - final human publication approval remains separately required
+prohibited_shortcuts:
+  - treating_a_similarity_percentage_as_a_pass
+  - checking_only_verbatim_text
+  - excluding_author_owned_prior_work_from_overlap_review
+  - assuming_ai_generated_material_is_original
+  - silently_waiving_destination_policy
+  - using_a_public_ai_service_on_confidential_manuscripts_without_authority
+outcomes:
+  pass: Integrity review is complete; other ClaimWright publication gates still apply.
+  hard_gate: Release is blocked pending correction, disclosure, permission, additional evidence, or authorized human review.
+  deny: Release contains confirmed misconduct, unlawful disclosure, or an uncorrectable rights or ethics violation.

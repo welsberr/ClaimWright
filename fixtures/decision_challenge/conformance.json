@@ -1,0 +1,17 @@
+{
+  "schema_version": "claimwright.decision_challenge_conformance.v1",
+  "purpose": "Cross-repository bounded decision-challenge classification fixtures.",
+  "not_permission_or_correctness": true,
+  "cases": [
+    {"case_id": "reversible_local_edit", "action": "format_local_note", "review_level": "none"},
+    {"case_id": "bounded_bibliography_lookup", "action": "bounded_evidence_check", "review_level": "quick"},
+    {"case_id": "durable_memory_promotion", "action": "promote_claim", "review_level": "standard"},
+    {"case_id": "public_site_release", "action": "publish", "review_level": "standard"},
+    {"case_id": "provider_enablement", "action": "enable_provider", "review_level": "standard"},
+    {"case_id": "destructive_synchronization", "action": "destructive_sync", "review_level": "escalated"},
+    {"case_id": "security_boundary_expansion", "action": "enable_external_function", "review_level": "escalated"},
+    {"case_id": "unchanged_decision_replay", "action": "replay_same_version", "review_level": "standard", "idempotent": true},
+    {"case_id": "new_material_evidence", "action": "reopen_new_version", "review_level": "standard", "new_decision_version": true},
+    {"case_id": "manufactured_doubt", "action": "invent_remote_objection", "review_level": "rejected", "decision_changing": false}
+  ]
+}

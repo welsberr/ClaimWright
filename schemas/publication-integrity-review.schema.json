@@ -1,0 +1,133 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claimwright.local/schemas/publication-integrity-review.schema.json",
+  "title": "ClaimWright Publication Integrity Review",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "artifact_id",
+    "artifact_sha256",
+    "release_scope",
+    "policy_id",
+    "policy_sha256",
+    "tool_version",
+    "destination",
+    "checks",
+    "similarity_review",
+    "decision",
+    "human_reviewer",
+    "reviewed_at"
+  ],
+  "properties": {
+    "schema_version": { "const": "claimwright.publication_integrity_review.v1" },
+    "artifact_id": { "type": "string", "minLength": 1 },
+    "artifact_sha256": { "type": "string", "pattern": "^[A-Fa-f0-9]{64}$" },
+    "artifact_text_sha256": { "type": "string", "pattern": "^[A-Fa-f0-9]{64}$" },
+    "release_scope": { "type": "string", "minLength": 1 },
+    "policy_id": {
+      "const": "claimwright.academic_publication_integrity.v1"
+    },
+    "policy_sha256": { "type": "string", "pattern": "^[A-Fa-f0-9]{64}$" },
+    "tool_version": { "type": "string", "minLength": 1 },
+    "destination": { "type": "string", "minLength": 1 },
+    "destination_policy_version": { "type": "string", "minLength": 1 },
+    "checks": {
+      "type": "array",
+      "minItems": 10,
+      "items": {
+        "type": "object",
+        "required": ["id", "status", "evidence"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "status": {
+            "type": "string",
+            "enum": ["pass", "fail", "unresolved", "documented_not_applicable"]
+          },
+          "evidence": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string" }
+          },
+          "limitations": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "corrective_actions": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "rationale": { "type": "string", "minLength": 1 }
+          },
+        "additionalProperties": false
+      }
+    },
+    "similarity_review": {
+      "type": "object",
+      "required": ["method", "corpus_limitations", "material_matches"],
+      "properties": {
+        "method": { "type": "string", "minLength": 1 },
+        "corpus_limitations": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+          "material_matches": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["source", "location", "disposition", "rationale"],
+            "properties": {
+              "source": { "type": "string" },
+              "location": { "type": "string" },
+              "disposition": { "type": "string" }
+              ,"rationale": { "type": "string", "minLength": 1 },
+              "evidence_refs": { "type": "array", "items": { "type": "string" } }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "decision": {
+      "type": "string",
+      "enum": ["pass", "hard_gate", "deny"]
+    },
+    "decision_rationale": { "type": "string", "minLength": 1 },
+    "human_reviewer": { "type": "string", "minLength": 1 },
+    "second_reviewer": { "type": "string", "minLength": 1 },
+    "ai_use": {
+      "type": "object",
+      "required": ["used", "disclosure"],
+      "properties": {
+        "used": { "type": "boolean" },
+        "disclosure": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "prior_publication": {
+      "type": "object",
+      "required": ["has_prior_work", "disclosure"],
+      "properties": {
+        "has_prior_work": { "type": "boolean" },
+        "disclosure": { "type": "string", "minLength": 1 },
+        "references": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    },
+    "related_work": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "source_references": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "permission_references": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "reviewed_at": { "type": "string", "format": "date-time" },
+    "notes": { "type": "string" }
+  },
+  "additionalProperties": false
+}

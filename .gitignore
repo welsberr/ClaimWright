@@ -1,4 +1,5 @@
 /tools/claimwright/target/
 **/*.tmp
 **/*.bak
-
+.agentos/runs/*
+!.agentos/runs/.gitkeep

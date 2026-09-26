@@ -1,0 +1,29 @@
+{
+  "schema_version": "claimwright.decision_challenge.v1",
+  "challenge_id": "dc_invalid_evidence",
+  "decision_id": "invalid_evidence",
+  "decision_version": 1,
+  "subject_id": "agent:test",
+  "action": "promote_claim",
+  "review_level": "standard",
+  "trigger_codes": ["thin_or_contested_evidence"],
+  "decision_summary": "Invalid fixture claiming a completed check without a result reference.",
+  "failure_modes": [
+    {
+      "failure_mode_id": "fm_unverified",
+      "hypothesis": "The candidate claim may not be supported by the cited source.",
+      "plausibility_basis": "The source was not inspected by the challenge runner.",
+      "material_consequence": "An unsupported claim could become durable memory.",
+      "decision_changing": true,
+      "discriminating_evidence": "Inspect the source-support record.",
+      "cheapest_check": "Query the reviewed citation ledger.",
+      "check_status": "completed",
+      "result_summary": "The source appears supportive."
+    }
+  ],
+  "outcome": "proceed",
+  "residual_uncertainty": [],
+  "stop_reason": "one_pass_complete",
+  "review_state": "reviewed",
+  "authority": "Policy finding only."
+}

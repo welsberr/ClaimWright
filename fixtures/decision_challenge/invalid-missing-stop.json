@@ -1,0 +1,16 @@
+{
+  "schema_version": "claimwright.decision_challenge.v1",
+  "challenge_id": "dc_invalid_stop",
+  "decision_id": "invalid_stop",
+  "decision_version": 1,
+  "subject_id": "agent:test",
+  "action": "publish",
+  "review_level": "standard",
+  "trigger_codes": ["public_release"],
+  "decision_summary": "Invalid fixture without a stop reason.",
+  "failure_modes": [],
+  "outcome": "proceed",
+  "residual_uncertainty": [],
+  "review_state": "reviewed",
+  "authority": "Policy finding only."
+}

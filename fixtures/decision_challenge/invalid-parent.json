@@ -1,0 +1,18 @@
+{
+  "schema_version": "claimwright.decision_challenge.v1",
+  "challenge_id": "dc_invalid_parent",
+  "decision_id": "invalid_parent",
+  "decision_version": 1,
+  "subject_id": "agent:test",
+  "action": "publish",
+  "review_level": "standard",
+  "trigger_codes": ["public_release"],
+  "decision_summary": "Invalid fixture that attempts recursive review.",
+  "failure_modes": [],
+  "outcome": "proceed",
+  "residual_uncertainty": [],
+  "stop_reason": "one_pass_complete",
+  "review_state": "reviewed",
+  "authority": "Policy finding only.",
+  "parent_challenge_id": "dc_invalid_parent"
+}

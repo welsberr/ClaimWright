@@ -1,0 +1,19 @@
+version: 0.1
+checklist_id: claimwright.agentos.wp_acceptance.v1
+checks:
+  - id: scope_preserved
+    question: Did the agent modify only the assigned WP scope and preserve unrelated worktree changes?
+  - id: source_of_truth_followed
+    question: Did the implementation follow the roadmap, policy, schema, and MOU rather than inventing alternate semantics?
+  - id: tests_added_or_updated
+    question: Are focused tests or fixtures present for the assigned behavior and its failure modes?
+  - id: hard_gates_preserved
+    question: Do unresolved integrity, privacy, rights, or publication findings still fail closed?
+  - id: confidentiality_preserved
+    question: Were credentials, private manuscript text, and agent run logs kept private?
+  - id: verification_passed
+    question: Did formatting, tests, schema checks, and the ClaimWright checker pass?
+  - id: limitations_reported
+    question: Are unsupported coverage, skipped inputs, and unresolved findings explicitly reported?
+  - id: human_acceptance
+    question: Has a human accepted this WP before the next WP begins?

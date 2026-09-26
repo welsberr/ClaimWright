@@ -13,7 +13,9 @@ This example exercises ClaimWright's initial workflow.
 7. Search for stale related claims.
 8. Prepare branch comparison.
 9. Apply public/private checks.
-10. Record final human publication approval.
+10. Run the academic-publication integrity review, including human disposition
+    of material similarity matches.
+11. Record final human publication approval.
 
 ## Branch Pattern
 
@@ -31,5 +33,5 @@ This example exercises ClaimWright's initial workflow.
 - rejected-citation trail;
 - adversarial review memo;
 - stale-claim task list;
+- publication-integrity review record;
 - publication gate result.
-

@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claimwright.local/schemas/decision-challenge.schema.json",
+  "title": "ClaimWright Bounded Decision Challenge",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "challenge_id",
+    "decision_id",
+    "decision_version",
+    "subject_id",
+    "action",
+    "review_level",
+    "trigger_codes",
+    "decision_summary",
+    "failure_modes",
+    "outcome",
+    "residual_uncertainty",
+    "stop_reason",
+    "review_state",
+    "authority"
+  ],
+  "properties": {
+    "schema_version": { "const": "claimwright.decision_challenge.v1" },
+    "challenge_id": { "type": "string", "minLength": 1, "maxLength": 200 },
+    "decision_id": { "type": "string", "minLength": 1, "maxLength": 200 },
+    "decision_version": { "type": "integer", "minimum": 1 },
+    "subject_id": { "type": "string", "minLength": 1, "maxLength": 200 },
+    "action": { "type": "string", "minLength": 1, "maxLength": 200 },
+    "review_level": { "enum": ["none", "quick", "standard", "escalated"] },
+    "trigger_codes": {
+      "type": "array",
+      "uniqueItems": true,
+      "maxItems": 8,
+      "items": { "type": "string", "minLength": 1, "maxLength": 100 }
+    },
+    "decision_summary": { "type": "string", "minLength": 1, "maxLength": 2000 },
+    "key_assumptions": {
+      "type": "array",
+      "maxItems": 8,
+      "items": { "type": "string", "minLength": 1, "maxLength": 1000 }
+    },
+    "failure_modes": {
+      "type": "array",
+      "maxItems": 3,
+      "items": { "$ref": "#/$defs/failure_mode" }
+    },
+    "outcome": { "enum": ["proceed", "revise", "defer", "escalate"] },
+    "residual_uncertainty": {
+      "type": "array",
+      "maxItems": 8,
+      "items": { "type": "string", "minLength": 1, "maxLength": 1000 }
+    },
+    "stop_reason": {
+      "enum": [
+        "not_triggered",
+        "no_plausible_decision_changing_failure_mode",
+        "highest_value_check_completed",
+        "one_pass_complete",
+        "budget_exhausted",
+        "evidence_unavailable",
+        "human_authority_required",
+        "decision_revised",
+        "decision_deferred"
+      ]
+    },
+    "review_state": { "enum": ["draft", "reviewed", "escalated", "closed"] },
+    "authority": { "type": "string", "minLength": 1, "maxLength": 1000 },
+    "parent_challenge_id": { "type": "null" },
+    "policy_version": { "type": "string", "minLength": 1, "maxLength": 100 }
+  },
+  "$defs": {
+    "failure_mode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "failure_mode_id",
+        "hypothesis",
+        "plausibility_basis",
+        "material_consequence",
+        "decision_changing",
+        "discriminating_evidence",
+        "cheapest_check",
+        "check_status"
+      ],
+      "properties": {
+        "failure_mode_id": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "hypothesis": { "type": "string", "minLength": 1, "maxLength": 1000 },
+        "plausibility_basis": { "type": "string", "minLength": 1, "maxLength": 1000 },
+        "material_consequence": { "type": "string", "minLength": 1, "maxLength": 1000 },
+        "decision_changing": { "const": true },
+        "discriminating_evidence": { "type": "string", "minLength": 1, "maxLength": 1000 },
+        "cheapest_check": { "type": "string", "minLength": 1, "maxLength": 1000 },
+        "check_status": { "enum": ["not_run", "completed", "inconclusive", "unavailable"] },
+        "result_ref": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "result_summary": { "type": "string", "minLength": 1, "maxLength": 1000 }
+      }
+    }
+  }
+}

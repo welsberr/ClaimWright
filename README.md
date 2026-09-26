@@ -29,8 +29,10 @@ Current capabilities:
 - **Agent role cards:** defines responsibilities for claim auditing, adversarial review, citation review, synthesis mapping, knowledge-base maintenance, and publication gating.
 - **Pre-action and post-action checks:** helps agents evaluate reversibility, evidence standards, public/private boundaries, capacity cost, assumptions, unresolved risks, and broader knowledge-base effects.
 - **Citation review pattern:** keeps accepted, rejected, and unresolved citation candidates reviewable instead of silently discarding costly retrieval work.
+- **Academic-publication integrity gate:** requires documented plagiarism and attribution, overlap, research-integrity, citation, authorship and AI disclosure, rights, ethics, confidentiality, harmful-content, and destination-policy checks for public-release text.
 - **Scientific virtues grounding:** incorporates Pennock-style scientific virtues as operational constraints on agent behavior.
 - **Rust substrate checker:** verifies that the core policy files required by the framework are present.
+- **Offline publication CLI:** initializes review records, checks artifact/policy bindings, preserves deny and hard-gate decisions, imports or generates similarity candidates, and applies destination requirements. A passing record permits the next review stage; it does not grant publication permission.
 
 ## Use Cases
 
@@ -81,6 +83,22 @@ Expected result:
 ClaimWright check passed: policy substrate is present.
 ```
 
+To try the executable publication gate from the repository root:
+
+```sh
+cargo run --manifest-path tools/claimwright/Cargo.toml -- publication init-review \
+  --artifact fixtures/publication/passing-artifact.txt \
+  --release-scope "Local demonstration" --output /tmp/claimwright-demo-review.json
+cargo run --manifest-path tools/claimwright/Cargo.toml -- publication check \
+  --artifact fixtures/publication/passing-artifact.txt \
+  --review /tmp/claimwright-demo-review.json --format json
+```
+
+The new review intentionally returns exit **1**, with unresolved review findings.
+It must not be edited to `pass` without the underlying review. See
+[publication gate consumers](docs/publication-gate-consumers.md) for commands,
+supported inputs, exit statuses, and the validation boundary.
+
 ## First Workflow To Try
 
 Start with the full path from private claim to public-safe artifact:
@@ -99,7 +117,8 @@ That workflow exercises the core ClaimWright loop:
 6. check stale or contradicted related claims;
 7. choose a conservative, balanced, or expansive branch;
 8. apply public/private and publication gates;
-9. record final human approval.
+9. complete the academic-publication integrity review;
+10. record final human approval.
 
 ## Repository Shape
 
@@ -109,9 +128,9 @@ That workflow exercises the core ClaimWright loop:
 | `policies/` | Machine-readable principles, enforcement defaults, and claim states |
 | `roles/` | Agent role cards and authority boundaries |
 | `checks/` | Pre-action and post-action review checks |
-| `schemas/` | Draft schemas for structured records |
+| `schemas/` | Draft schemas for claims, citations, and publication-integrity review records |
 | `sources/` | Source notes grounding policy concepts |
-| `tools/claimwright/` | Minimal Rust CLI for policy-substrate checks |
+| `tools/claimwright/` | Rust CLI for substrate checks and offline publication review |
 | `examples/` | Worked workflow examples |
 | `roadmap/` | Implemented versus future capability |
 
@@ -121,7 +140,7 @@ ClaimWright defaults to a mixed enforcement model:
 
 - advisory for private exploratory work;
 - soft gates for costly, long-running, durable, or capacity-threatening work;
-- hard gates for public release, private-data exposure, fabricated or unverified citations, destructive irreversible actions, and stale or contradicted claims.
+- hard gates for public release, failed academic-publication integrity review, private-data exposure, fabricated or unverified citations, destructive irreversible actions, and stale or contradicted claims.
 
 The default is meant to support serious work without turning every action into ceremony. Enforcement should become stricter as work approaches public release or reputational risk increases.
 
@@ -155,6 +174,8 @@ Implemented now:
 - draft schemas;
 - source grounding notes;
 - minimal Rust substrate checker;
+- executable publication review, artifact/policy binding and similarity-candidate checks;
+- versioned destination profiles and consumer fixtures;
 - first public-safe artifact workflow.
 
 Planned next:

@@ -1,0 +1,31 @@
+{
+  "schema_version": "claimwright.decision_challenge.v1",
+  "challenge_id": "dc_escalated_001",
+  "decision_id": "security_boundary_001",
+  "decision_version": 1,
+  "subject_id": "operator:security",
+  "action": "enable_external_function",
+  "review_level": "escalated",
+  "trigger_codes": ["security_boundary_change", "authority_or_capability_expansion"],
+  "decision_summary": "Enable a new external function in a protected execution profile.",
+  "key_assumptions": ["The function is restricted to the declared host and input types."],
+  "failure_modes": [
+    {
+      "failure_mode_id": "fm_scope_escape",
+      "hypothesis": "The function may reach resources outside its declared allowlist.",
+      "plausibility_basis": "The adapter introduces a new network-capable code path.",
+      "material_consequence": "Protected data or systems could be accessed.",
+      "decision_changing": true,
+      "discriminating_evidence": "Review sandbox and allowlist tests under an independent security role.",
+      "cheapest_check": "Run the isolated capability test suite.",
+      "check_status": "completed",
+      "result_ref": "artifact:capability-audit-001",
+      "result_summary": "The allowlist and denial cases passed independent review."
+    }
+  ],
+  "outcome": "escalate",
+  "residual_uncertainty": ["Production host differences require explicit human acceptance."],
+  "stop_reason": "human_authority_required",
+  "review_state": "escalated",
+  "authority": "This artifact records review evidence; it cannot grant execution authority."
+}

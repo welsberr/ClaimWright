@@ -1,0 +1,43 @@
+{
+  "schema_version": "claimwright.decision_challenge.v1",
+  "challenge_id": "dc_standard_001",
+  "decision_id": "public_release_001",
+  "decision_version": 1,
+  "subject_id": "agent:publisher",
+  "action": "publish",
+  "review_level": "standard",
+  "trigger_codes": ["public_release", "difficult_to_reverse"],
+  "decision_summary": "Publish the reviewed artifact to the configured public surface.",
+  "key_assumptions": ["The staged tree contains only reviewed public-safe records."],
+  "failure_modes": [
+    {
+      "failure_mode_id": "fm_private_path",
+      "hypothesis": "A rendered artifact may still expose a local path.",
+      "plausibility_basis": "The build consumes local source manifests.",
+      "material_consequence": "Private workspace metadata could be disclosed.",
+      "decision_changing": true,
+      "discriminating_evidence": "Scan the staged public tree for path and host markers.",
+      "cheapest_check": "Run the deterministic public-surface scanner.",
+      "check_status": "completed",
+      "result_ref": "artifact:public-scan-001",
+      "result_summary": "No configured private-path markers were found."
+    },
+    {
+      "failure_mode_id": "fm_unresolved_claim",
+      "hypothesis": "A high-risk claim may lack an accepted source reference.",
+      "plausibility_basis": "The draft contains newly added claims.",
+      "material_consequence": "The public release could overstate evidence.",
+      "decision_changing": true,
+      "discriminating_evidence": "Compare claims with reviewed citation records.",
+      "cheapest_check": "Run the claim/citation consistency check.",
+      "check_status": "inconclusive",
+      "result_ref": "artifact:citation-check-001",
+      "result_summary": "One low-risk citation remains unresolved."
+    }
+  ],
+  "outcome": "revise",
+  "residual_uncertainty": ["The unresolved citation requires a source-owner response."],
+  "stop_reason": "one_pass_complete",
+  "review_state": "reviewed",
+  "authority": "Policy finding only; publication gate authority remains separately configured."
+}

@@ -57,6 +57,10 @@ principles:
     name: Prior Work Review
     rule: Costly or durable initiatives should check relevant prior work before repeating an explored approach.
     enforcement_default: soft_gate
+  - id: academic_publication_integrity
+    name: Academic Publication Integrity
+    rule: Text intended for public release must pass documented plagiarism, overlap, research-integrity, attribution, authorship, rights, ethics, disclosure, confidentiality, and destination-policy checks.
+    enforcement_default: hard_gate_for_public_release
 scientific_virtues:
   - curiosity
   - veracity
