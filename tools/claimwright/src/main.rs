@@ -13,11 +13,7 @@ fn main() {
             Ok(message) => println!("{message}"),
             Err(message) => {
                 eprintln!("error: {message}");
-                process::exit(if message.starts_with("publication.similarity.") {
-                    1
-                } else {
-                    2
-                });
+                process::exit(publication::cli::error_exit_code(&message));
             }
         }
         return;
@@ -32,11 +28,7 @@ fn main() {
             }
             Err(message) => {
                 eprintln!("error: {message}");
-                process::exit(if message.starts_with("publication.similarity.") {
-                    1
-                } else {
-                    2
-                });
+                process::exit(publication::cli::error_exit_code(&message));
             }
         }
     }
@@ -44,6 +36,21 @@ fn main() {
         && args.get(2).map(String::as_str) == Some("similarity")
         && args.get(3).map(String::as_str) == Some("generate")
     {
+        if let Err(message) = publication::cli::validate_options(
+            &args,
+            4,
+            &[
+                "--artifact",
+                "--comparison-corpus",
+                "--output",
+                "--ngram-size",
+                "--jaccard-threshold",
+            ],
+            &[],
+        ) {
+            eprintln!("error: {message}");
+            process::exit(2);
+        }
         let mut artifact = None;
         let mut corpus = None;
         let mut output = None;
@@ -66,11 +73,11 @@ fn main() {
                 }
                 "--ngram-size" => {
                     i += 1;
-                    ngram = args.get(i).and_then(|v| v.parse().ok()).unwrap_or(8)
+                    ngram = args[i].parse().unwrap_or(0)
                 }
                 "--jaccard-threshold" => {
                     i += 1;
-                    threshold = args.get(i).and_then(|v| v.parse().ok()).unwrap_or(0.7)
+                    threshold = args[i].parse().unwrap_or(f64::NAN)
                 }
                 x => {
                     eprintln!("error: unknown option: {x}");
@@ -78,6 +85,12 @@ fn main() {
                 }
             }
             i += 1;
+        }
+        if ngram == 0 || !threshold.is_finite() || !(0.0..=1.0).contains(&threshold) {
+            eprintln!(
+                "error: ngram size must be positive and Jaccard threshold must be between 0 and 1"
+            );
+            process::exit(2);
         }
         match (artifact, corpus, output) {
             (Some(a), Some(c), Some(o)) => match publication::similarity::generate(

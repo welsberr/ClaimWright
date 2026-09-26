@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Deserialize, Serialize, PartialEq, Eq)]
+#[serde(deny_unknown_fields)]
 pub struct ReviewRecord {
     pub schema_version: String,
     pub artifact_id: String,
@@ -28,6 +29,7 @@ pub struct ReviewRecord {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize, PartialEq, Eq)]
+#[serde(deny_unknown_fields)]
 pub struct CheckRecord {
     pub id: String,
     pub status: CheckStatus,
@@ -47,6 +49,7 @@ pub enum CheckStatus {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize, PartialEq, Eq)]
+#[serde(deny_unknown_fields)]
 pub struct SimilarityReview {
     pub method: String,
     pub corpus_limitations: Vec<String>,
@@ -54,6 +57,7 @@ pub struct SimilarityReview {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize, PartialEq, Eq)]
+#[serde(deny_unknown_fields)]
 pub struct MaterialMatch {
     pub source: String,
     pub location: String,
@@ -71,12 +75,14 @@ pub enum Decision {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize, PartialEq, Eq)]
+#[serde(deny_unknown_fields)]
 pub struct AiUse {
     pub used: bool,
     pub disclosure: String,
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize, PartialEq, Eq)]
+#[serde(deny_unknown_fields)]
 pub struct PriorPublication {
     pub has_prior_work: bool,
     pub disclosure: String,

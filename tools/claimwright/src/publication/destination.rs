@@ -12,16 +12,54 @@ pub struct Profile {
 pub fn load(path: &std::path::Path) -> Result<Profile, String> {
     let t = std::fs::read_to_string(path)
         .map_err(|e| format!("cannot read destination policy: {e}"))?;
-    let get = |k: &str| {
-        t.lines().find_map(|l| {
-            let mut p = l.splitn(2, ':');
-            if p.next()?.trim() == k {
-                Some(p.next()?.trim().trim_matches('"').to_string())
-            } else {
-                None
-            }
-        })
-    };
+    let allowed = [
+        "schema_version",
+        "destination",
+        "policy_version",
+        "require_ai_disclosure",
+        "require_prior_publication_disclosure",
+        "require_ethics_approval",
+        "require_conflict_statement",
+        "require_data_availability",
+    ];
+    let mut fields = std::collections::BTreeMap::new();
+    for line in t
+        .lines()
+        .map(str::trim)
+        .filter(|line| !line.is_empty() && !line.starts_with('#'))
+    {
+        let (key, value) = line
+            .split_once(':')
+            .ok_or("publication.destination.invalid_profile: expected flat key: value entries")?;
+        let key = key.trim();
+        if !allowed.contains(&key) || fields.contains_key(key) {
+            return Err(format!(
+                "publication.destination.invalid_profile: unknown or duplicate field {key}"
+            ));
+        }
+        fields.insert(key.to_string(), value.trim().trim_matches('"').to_string());
+    }
+    let get = |key: &str| fields.get(key).cloned();
+    if get("schema_version").as_deref() != Some("claimwright.destination_policy.v1") {
+        return Err(
+            "publication.destination.invalid_profile: missing or unsupported schema_version".into(),
+        );
+    }
+    // This is intentionally a flat key/value profile, not a general YAML parser.
+    // Refuse ambiguous booleans rather than silently disabling a requirement.
+    for key in [
+        "require_ai_disclosure",
+        "require_prior_publication_disclosure",
+        "require_ethics_approval",
+        "require_conflict_statement",
+        "require_data_availability",
+    ] {
+        if get(key).is_some_and(|value| value != "true" && value != "false") {
+            return Err(format!(
+                "publication.destination.invalid_profile: {key} must be true or false"
+            ));
+        }
+    }
     let destination = get("destination")
         .filter(|x| !x.is_empty())
         .ok_or("publication.destination.invalid_profile: destination missing")?;
@@ -40,6 +78,18 @@ pub fn load(path: &std::path::Path) -> Result<Profile, String> {
 }
 pub fn findings(p: &Profile, r: &ReviewRecord) -> Vec<(String, String)> {
     let mut o = Vec::new();
+    if r.destination != p.destination {
+        o.push((
+            "publication.destination.name_mismatch".into(),
+            "review destination does not match the supplied profile".into(),
+        ));
+    }
+    if r.destination_policy_version.as_deref() != Some(p.version.as_str()) {
+        o.push((
+            "publication.destination.version_mismatch".into(),
+            "review destination policy version does not match the supplied profile".into(),
+        ));
+    }
     if p.ai && r.ai_use.is_none() {
         o.push((
             "publication.destination.ai_disclosure_missing".into(),

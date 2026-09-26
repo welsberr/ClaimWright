@@ -86,6 +86,18 @@ pub fn evaluate(
             "policy",
         ));
     }
+    if artifact.text_sha256.is_none() {
+        findings.push(simple("publication.artifact.extracted_text_required",
+            "non-text artifacts require a separately reviewed text extraction; this checker cannot clear them", "artifact"));
+    } else if record.artifact_text_sha256.as_ref().is_some_and(|hash| {
+        !hash.eq_ignore_ascii_case(artifact.text_sha256.as_deref().unwrap_or(""))
+    }) {
+        findings.push(simple(
+            "publication.artifact.text_hash_mismatch",
+            "text hash does not match evaluated artifact text",
+            "artifact",
+        ));
+    }
     findings.sort_by(|a, b| {
         (
             &a.decision,
@@ -101,9 +113,10 @@ pub fn evaluate(
             ))
     });
     for c in &similarity_candidates {
-        if c.materiality == "material"
-            && (c.disposition.eq_ignore_ascii_case("unresolved")
-                || c.disposition.eq_ignore_ascii_case("pending"))
+        if c.materiality == "unknown"
+            || (c.materiality == "material"
+                && (c.disposition.eq_ignore_ascii_case("unresolved")
+                    || c.disposition.eq_ignore_ascii_case("pending")))
         {
             findings.push(Finding {
                 reason_code: "publication.similarity.unresolved_match".into(),
@@ -137,13 +150,14 @@ pub fn evaluate(
                 b.artifact_location.as_deref().unwrap_or(""),
             ))
     });
-    let overall = if findings.iter().any(|f| f.decision == "deny") {
-        "deny"
-    } else if findings.is_empty() && matches!(record.decision, Decision::Pass) {
-        "pass"
-    } else {
-        "hard_gate"
-    };
+    let overall =
+        if record.decision == Decision::Deny || findings.iter().any(|f| f.decision == "deny") {
+            "deny"
+        } else if findings.is_empty() && matches!(record.decision, Decision::Pass) {
+            "pass"
+        } else {
+            "hard_gate"
+        };
     let actions = findings
         .iter()
         .flat_map(|f| f.required_actions.clone())
@@ -165,7 +179,7 @@ pub fn evaluate(
         checks_not_applicable: na,
         required_actions: actions,
         human_reviewer: record.human_reviewer.clone(),
-        approval_state: if record.decision == Decision::Pass {
+        approval_state: if overall == "pass" {
             "approved".into()
         } else {
             "pending".into()

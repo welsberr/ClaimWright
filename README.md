@@ -32,6 +32,7 @@ Current capabilities:
 - **Academic-publication integrity gate:** requires documented plagiarism and attribution, overlap, research-integrity, citation, authorship and AI disclosure, rights, ethics, confidentiality, harmful-content, and destination-policy checks for public-release text.
 - **Scientific virtues grounding:** incorporates Pennock-style scientific virtues as operational constraints on agent behavior.
 - **Rust substrate checker:** verifies that the core policy files required by the framework are present.
+- **Offline publication CLI:** initializes review records, checks artifact/policy bindings, preserves deny and hard-gate decisions, imports or generates similarity candidates, and applies destination requirements. A passing record permits the next review stage; it does not grant publication permission.
 
 ## Use Cases
 
@@ -82,6 +83,22 @@ Expected result:
 ClaimWright check passed: policy substrate is present.
 ```
 
+To try the executable publication gate from the repository root:
+
+```sh
+cargo run --manifest-path tools/claimwright/Cargo.toml -- publication init-review \
+  --artifact fixtures/publication/passing-artifact.txt \
+  --release-scope "Local demonstration" --output /tmp/claimwright-demo-review.json
+cargo run --manifest-path tools/claimwright/Cargo.toml -- publication check \
+  --artifact fixtures/publication/passing-artifact.txt \
+  --review /tmp/claimwright-demo-review.json --format json
+```
+
+The new review intentionally returns exit **1**, with unresolved review findings.
+It must not be edited to `pass` without the underlying review. See
+[publication gate consumers](docs/publication-gate-consumers.md) for commands,
+supported inputs, exit statuses, and the validation boundary.
+
 ## First Workflow To Try
 
 Start with the full path from private claim to public-safe artifact:
@@ -113,7 +130,7 @@ That workflow exercises the core ClaimWright loop:
 | `checks/` | Pre-action and post-action review checks |
 | `schemas/` | Draft schemas for claims, citations, and publication-integrity review records |
 | `sources/` | Source notes grounding policy concepts |
-| `tools/claimwright/` | Minimal Rust CLI for policy-substrate checks |
+| `tools/claimwright/` | Rust CLI for substrate checks and offline publication review |
 | `examples/` | Worked workflow examples |
 | `roadmap/` | Implemented versus future capability |
 
@@ -157,6 +174,8 @@ Implemented now:
 - draft schemas;
 - source grounding notes;
 - minimal Rust substrate checker;
+- executable publication review, artifact/policy binding and similarity-candidate checks;
+- versioned destination profiles and consumer fixtures;
 - first public-safe artifact workflow.
 
 Planned next:

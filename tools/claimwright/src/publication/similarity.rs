@@ -9,6 +9,7 @@ pub struct CandidateSummary {
 }
 #[allow(dead_code)]
 #[derive(Debug, Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct SimilarityReport {
     pub schema_version: String,
     pub artifact_sha256: String,
@@ -20,6 +21,7 @@ pub struct SimilarityReport {
 }
 #[allow(dead_code)]
 #[derive(Debug, Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct Candidate {
     pub source_id: String,
     pub artifact_location: String,
@@ -50,6 +52,22 @@ pub fn load(path: &std::path::Path, artifact_hash: &str) -> Result<SimilarityRep
         return Err("publication.similarity.limitations_missing: method, corpus, and limitations are required".into());
     }
     for c in &r.candidates {
+        if c.source_id.trim().is_empty()
+            || c.artifact_location.trim().is_empty()
+            || !["material", "not_material", "unknown"].contains(&c.materiality.as_str())
+            || c.disposition.trim().is_empty()
+        {
+            return Err("publication.similarity.invalid_candidate: source, location, materiality and disposition are required".into());
+        }
+        if !["pending", "unresolved"].contains(&c.disposition.as_str())
+            && c.disposition_rationale
+                .as_deref()
+                .unwrap_or("")
+                .trim()
+                .is_empty()
+        {
+            return Err("publication.similarity.disposition_missing: classified candidates require a rationale".into());
+        }
         if c.excerpt.as_ref().is_some_and(|e| e.len() > 1000) {
             return Err(
                 "publication.similarity.evidence_too_long: excerpt exceeds 1000 characters".into(),
@@ -78,6 +96,9 @@ pub fn generate(
     ngram: usize,
     threshold: f64,
 ) -> Result<(), String> {
+    if ngram == 0 || !threshold.is_finite() || !(0.0..=1.0).contains(&threshold) {
+        return Err("invalid similarity parameters".into());
+    }
     let text =
         std::fs::read_to_string(artifact).map_err(|e| format!("cannot read artifact text: {e}"))?;
     let words: Vec<String> = normalize(&text)
@@ -85,22 +106,27 @@ pub fn generate(
         .map(str::to_string)
         .collect();
     let mut candidates = Vec::new();
-    for entry in std::fs::read_dir(corpus).map_err(|e| e.to_string())? {
+    for entry in std::fs::read_dir(corpus).map_err(|e| format!("cannot read corpus: {e}"))? {
         let p = entry.map_err(|e| e.to_string())?.path();
         if !p.is_file() {
             continue;
         }
-        let n = normalize(&std::fs::read_to_string(&p).unwrap_or_default());
-        for i in 0..words.len().saturating_sub(ngram.saturating_sub(1)) {
-            let phrase = words[i..i + ngram].join(" ");
-            if n.contains(&phrase) {
+        let n = normalize(
+            &std::fs::read_to_string(&p)
+                .map_err(|e| format!("cannot read corpus entry {}: {e}", p.display()))?,
+        );
+        let source_words: Vec<&str> = n.split_whitespace().collect();
+        for (i, window) in words.windows(ngram).enumerate() {
+            let phrase = window.join(" ");
+            if source_words.windows(ngram).any(|candidate| {
+                candidate
+                    .iter()
+                    .copied()
+                    .eq(window.iter().map(String::as_str))
+            }) {
                 candidates.push(Candidate {
                     source_id: p.display().to_string(),
-                    artifact_location: format!(
-                        "byte:{}-{}",
-                        text.to_lowercase().find(&words[i]).unwrap_or(0),
-                        text.to_lowercase().find(&words[i]).unwrap_or(0) + phrase.len()
-                    ),
+                    artifact_location: format!("token:{i}-{}", i + ngram),
                     source_location: None,
                     overlap_kind: "exact".into(),
                     score: None,

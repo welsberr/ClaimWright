@@ -1,7 +1,7 @@
 use super::model::{CheckStatus, Decision, ReviewRecord};
 use serde_json::Value;
 use std::collections::HashSet;
-use std::time::{Duration, SystemTime, UNIX_EPOCH};
+use std::time::{SystemTime, UNIX_EPOCH};
 
 pub const REQUIRED_CHECK_IDS: &[&str] = &[
     "plagiarism_and_attribution",
@@ -168,17 +168,48 @@ fn validate_semantics(
             "human reviewer is required",
         ));
     }
-    if !valid_timestamp(&record.reviewed_at) {
+    let reviewed_at = timestamp_seconds(&record.reviewed_at);
+    if reviewed_at.is_none() {
         errors.push(ValidationError::new(
             "publication.review.invalid_timestamp",
             "reviewed_at must be an RFC3339 timestamp",
         ));
     }
-    if record.reviewed_at.starts_with("2099-") || is_future(&record.reviewed_at) {
+    if reviewed_at.is_some_and(|seconds| {
+        seconds
+            > SystemTime::now()
+                .duration_since(UNIX_EPOCH)
+                .unwrap_or_default()
+                .as_secs() as i64
+    }) {
         errors.push(ValidationError::new(
             "publication.review.future_timestamp",
             "review timestamp is in the future",
         ));
+    }
+    if record.decision == Decision::Pass
+        && record
+            .human_reviewer
+            .trim()
+            .eq_ignore_ascii_case("UNASSIGNED")
+    {
+        errors.push(ValidationError::new(
+            "publication.review.reviewer_missing",
+            "a passing review must name its human reviewer",
+        ));
+    }
+    for (field, value) in [
+        ("artifact_id", &record.artifact_id),
+        ("release_scope", &record.release_scope),
+        ("destination", &record.destination),
+        ("tool_version", &record.tool_version),
+    ] {
+        if value.trim().is_empty() {
+            errors.push(ValidationError::new(
+                "publication.review.schema_invalid",
+                format!("{field} must be nonempty"),
+            ));
+        }
     }
 
     let mut seen = HashSet::new();
@@ -285,29 +316,83 @@ fn is_sha256(value: &str) -> bool {
 fn hashes_equal(left: &str, right: &str) -> bool {
     left.eq_ignore_ascii_case(right)
 }
-fn valid_timestamp(value: &str) -> bool {
-    let bytes = value.as_bytes();
-    value.len() >= 20
-        && bytes.get(4) == Some(&b'-')
-        && bytes.get(7) == Some(&b'-')
-        && bytes.get(10) == Some(&b'T')
-        && value.ends_with('Z')
-        && [0, 1, 2, 3, 5, 6, 8, 9]
-            .iter()
-            .all(|index| bytes.get(*index).is_some_and(u8::is_ascii_digit))
-}
-fn is_future(value: &str) -> bool {
-    let year: u64 = value
-        .get(0..4)
-        .and_then(|part| part.parse().ok())
-        .unwrap_or(0);
-    let now_year = 1970
-        + SystemTime::now()
-            .duration_since(UNIX_EPOCH)
-            .unwrap_or(Duration::ZERO)
-            .as_secs()
-            / 31_556_952;
-    year > now_year + 1
+// RFC3339 calendar and UTC-offset validation, at whole-second precision.
+// Leap-second notation is deliberately rejected rather than normalized silently.
+fn timestamp_seconds(value: &str) -> Option<i64> {
+    if !value.is_ascii() || value.len() < 20 {
+        return None;
+    }
+    let b = value.as_bytes();
+    if b[4] != b'-'
+        || b[7] != b'-'
+        || ![b'T', b't'].contains(&b[10])
+        || b[13] != b':'
+        || b[16] != b':'
+    {
+        return None;
+    }
+    let number = |start: usize, end: usize| -> Option<i64> {
+        let part = value.get(start..end)?;
+        if !part.bytes().all(|b| b.is_ascii_digit()) {
+            return None;
+        }
+        part.parse().ok()
+    };
+    let (year, month, day) = (number(0, 4)?, number(5, 7)?, number(8, 10)?);
+    let (hour, minute, second) = (number(11, 13)?, number(14, 16)?, number(17, 19)?);
+    let leap = year % 4 == 0 && (year % 100 != 0 || year % 400 == 0);
+    let months = [
+        31,
+        if leap { 29 } else { 28 },
+        31,
+        30,
+        31,
+        30,
+        31,
+        31,
+        30,
+        31,
+        30,
+        31,
+    ];
+    if !(1..=12).contains(&month)
+        || !(1..=months[(month - 1) as usize]).contains(&day)
+        || hour > 23
+        || minute > 59
+        || second > 59
+    {
+        return None;
+    }
+    let mut end = 19;
+    if b.get(end) == Some(&b'.') {
+        end += 1;
+        let start = end;
+        while b.get(end).is_some_and(u8::is_ascii_digit) {
+            end += 1;
+        }
+        if end == start {
+            return None;
+        }
+    }
+    let offset = match value.get(end..)? {
+        "Z" | "z" => 0,
+        zone if zone.len() == 6
+            && [b'+', b'-'].contains(&zone.as_bytes()[0])
+            && zone.as_bytes()[3] == b':' =>
+        {
+            let h = number(end + 1, end + 3)?;
+            let m = number(end + 4, end + 6)?;
+            if h > 23 || m > 59 {
+                return None;
+            }
+            (h * 3600 + m * 60) * if zone.starts_with('-') { -1 } else { 1 }
+        }
+        _ => return None,
+    };
+    let before = |y: i64| 365 * y + (y + 3) / 4 - (y + 99) / 100 + (y + 399) / 400;
+    let days =
+        before(year) - before(1970) + months[..(month - 1) as usize].iter().sum::<i64>() + day - 1;
+    Some(days * 86400 + hour * 3600 + minute * 60 + second - offset)
 }
 
 #[cfg(test)]
@@ -359,5 +444,28 @@ mod tests {
         assert!(errors
             .iter()
             .any(|error| error.reason_code == "publication.similarity.unresolved_match"));
+    }
+
+    #[test]
+    fn timestamps_validate_calendar_and_offsets() {
+        assert_eq!(timestamp_seconds("1970-01-01T00:00:00Z"), Some(0));
+        assert_eq!(
+            timestamp_seconds("2026-03-16T17:46:33-04:00"),
+            timestamp_seconds("2026-03-16T21:46:33Z")
+        );
+        assert_eq!(
+            timestamp_seconds("2026-03-16T21:46:33.123+00:00"),
+            timestamp_seconds("2026-03-16T21:46:33Z")
+        );
+        for bad in [
+            "2026-02-29T00:00:00Z",
+            "2026-04-31T00:00:00Z",
+            "2026-03-16T25:00:00Z",
+            "2026-03-16T00:00:00+25:00",
+            "2026-03-16T00:00:00.Z",
+        ] {
+            assert!(timestamp_seconds(bad).is_none(), "{bad}");
+        }
+        assert!(timestamp_seconds("2024-02-29T00:00:00Z").is_some());
     }
 }

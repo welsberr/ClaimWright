@@ -8,6 +8,17 @@ use std::path::{Path, PathBuf};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 pub fn init_review(args: &[String]) -> Result<String, String> {
+    validate_options(
+        args,
+        3,
+        &[
+            "--artifact",
+            "--release-scope",
+            "--output",
+            "--similarity-report",
+        ],
+        &["--force"],
+    )?;
     let mut artifact_path = None;
     let mut scope = None;
     let mut output = None;
@@ -64,6 +75,22 @@ pub fn init_review(args: &[String]) -> Result<String, String> {
             rationale: None,
         })
         .collect();
+    let mut material_matches = Vec::new();
+    for path in &similarity_reports {
+        let imported = super::similarity::load(Path::new(path), &info.sha256)?;
+        for candidate in imported.candidates {
+            if candidate.materiality != "not_material" {
+                material_matches.push(super::model::MaterialMatch {
+                    source: candidate.source_id,
+                    location: candidate.artifact_location,
+                    disposition: "pending".into(),
+                    rationale: "Imported candidate requires human classification and disposition."
+                        .into(),
+                    evidence_refs: Some(vec![path.clone()]),
+                });
+            }
+        }
+    }
     let record = ReviewRecord {
         schema_version: "claimwright.publication_integrity_review.v1".into(),
         artifact_id: artifact_path,
@@ -79,7 +106,7 @@ pub fn init_review(args: &[String]) -> Result<String, String> {
         similarity_review: SimilarityReview {
             method: "not yet performed".into(),
             corpus_limitations: vec!["Similarity review is required before public release.".into()],
-            material_matches: vec![],
+            material_matches,
         },
         decision: Decision::HardGate,
         decision_rationale: Some(
@@ -113,6 +140,19 @@ pub fn init_review(args: &[String]) -> Result<String, String> {
 }
 
 pub fn check_review(args: &[String]) -> Result<(String, i32), String> {
+    validate_options(
+        args,
+        3,
+        &[
+            "--artifact",
+            "--review",
+            "--format",
+            "--output",
+            "--similarity-report",
+            "--destination-policy",
+        ],
+        &[],
+    )?;
     let mut artifact_path = None;
     let mut review_path = None;
     let mut format = "human";
@@ -193,9 +233,17 @@ pub fn check_review(args: &[String]) -> Result<(String, i32), String> {
                 human_review_required: true,
             });
         }
-        if !result.findings.is_empty() {
+        if !result.findings.is_empty() && result.overall_decision != "deny" {
             result.overall_decision = "hard_gate".into();
         }
+        if result.overall_decision != "pass" {
+            result.approval_state = "pending".into();
+        }
+        result.required_actions = result
+            .findings
+            .iter()
+            .flat_map(|f| f.required_actions.clone())
+            .collect();
     }
     let text = if format == "json" {
         super::report::json(&result)?
@@ -211,6 +259,43 @@ pub fn check_review(args: &[String]) -> Result<(String, i32), String> {
         1
     };
     Ok((text, code))
+}
+
+pub fn validate_options(
+    args: &[String],
+    start: usize,
+    values: &[&str],
+    flags: &[&str],
+) -> Result<(), String> {
+    let mut i = start;
+    while i < args.len() {
+        let option = args[i].as_str();
+        if flags.contains(&option) {
+            i += 1;
+            continue;
+        }
+        if !values.contains(&option) {
+            return Err(format!("unknown option: {option}"));
+        }
+        if args.get(i + 1).is_none_or(|value| value.starts_with("--")) {
+            return Err(format!("{option} requires a value"));
+        }
+        i += 2;
+    }
+    Ok(())
+}
+
+pub fn error_exit_code(message: &str) -> i32 {
+    if message.starts_with("cannot read")
+        || message.starts_with("cannot write")
+        || message.starts_with("cannot create")
+    {
+        3
+    } else if message.starts_with("publication.similarity.") {
+        1
+    } else {
+        2
+    }
 }
 
 fn timestamp() -> String {
